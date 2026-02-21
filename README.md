@@ -16,7 +16,8 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 - 🔄 **Smart Conflict Handling**: Skips existing labels by default, `--force` to update
 - 🧹 **Wipe Command**: Remove all existing labels with a confirmation prompt
 - ✅ **Pre-Flight Checks**: Validates `gh` CLI is installed and authenticated before doing anything
-- 📊 **Clear Output**: Color-coded status for each label with a summary report
+- 📊 **Clear Output**: Structured logging powered by [@wgtechlabs/log-engine](https://github.com/wgtechlabs/log-engine) with color-coded levels and emoji
+- 🎨 **ASCII Banner**: Beautiful ANSI Shadow figlet banner with version and author info
 - 🌐 **Dual Runtime**: Works with both `npx` and `bunx`
 
 ## Quick Start
@@ -149,7 +150,10 @@ Broad software layers — universal across any project.
 ghlt — GitHub Labels Template CLI
 
 USAGE
-  ghlt apply|wipe
+  ghlt [OPTIONS] apply|wipe
+
+OPTIONS
+  -v, --version              Show version number
 
 COMMANDS
   apply    Apply labels from the template to a repository
@@ -162,6 +166,15 @@ OPTIONS (apply)
 OPTIONS (wipe)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
   -y, --yes                  Skip confirmation prompt
+```
+
+## Testing
+
+This project uses the [Bun test framework](https://bun.sh/docs/cli/test) for testing.
+
+```bash
+# Run all tests
+bun test
 ```
 
 ## Contributing
