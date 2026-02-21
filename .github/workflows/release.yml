@@ -1,0 +1,19 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: wgtechlabs/release-build-flow-action@v1.4.2
+        with:
+          github-token: ${{ secrets.GH_PAT }}

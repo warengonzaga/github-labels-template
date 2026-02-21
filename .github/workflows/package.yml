@@ -1,0 +1,28 @@
+name: Build and Publish
+
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: wgtechlabs/package-build-flow-action@v2.0.1
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          registry: 'both'
+          package-manager: 'bun'

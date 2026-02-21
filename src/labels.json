@@ -1,0 +1,32 @@
+{
+  "type": [
+    { "name": "bug", "color": "d73a4a", "description": "[Type] Something isn't working [issues, PRs]" },
+    { "name": "enhancement", "color": "1a7f37", "description": "[Type] New feature or improvement to existing functionality [issues, PRs]" },
+    { "name": "documentation", "color": "0075ca", "description": "[Type] Improvements or additions to docs, README, or guides [issues, PRs]" },
+    { "name": "refactor", "color": "8957e5", "description": "[Type] Code improvement without changing functionality [PRs]" },
+    { "name": "performance", "color": "e3795c", "description": "[Type] Optimization, speed, or resource usage improvements [issues, PRs]" },
+    { "name": "security", "color": "d4a72c", "description": "[Type] Security vulnerability or hardening [issues, PRs]" }
+  ],
+  "status": [
+    { "name": "blocked", "color": "cf222e", "description": "[Status] Waiting on another issue, decision, or external factor [issues]" },
+    { "name": "needs triage", "color": "e16f24", "description": "[Status] New issue — needs review and categorization [issues]" },
+    { "name": "awaiting response", "color": "1a7ec7", "description": "[Status] Waiting for more information from the reporter [issues]" },
+    { "name": "ready", "color": "2da44e", "description": "[Status] Triaged and ready to be picked up [issues]" }
+  ],
+  "community": [
+    { "name": "good first issue", "color": "7057ff", "description": "[Community] Good for newcomers — well-scoped and documented [issues]" },
+    { "name": "help wanted", "color": "0e8a16", "description": "[Community] Open for community contribution [issues]" }
+  ],
+  "resolution": [
+    { "name": "duplicate", "color": "cfd3d7", "description": "[Resolution] This issue or pull request already exists [issues, PRs]" },
+    { "name": "invalid", "color": "cfd3d7", "description": "[Resolution] This doesn't seem right [issues, PRs]" },
+    { "name": "wontfix", "color": "cfd3d7", "description": "[Resolution] This will not be worked on [issues]" }
+  ],
+  "area": [
+    { "name": "core", "color": "0052cc", "description": "[Area] Core logic, business rules, and primary functionality [issues, PRs]" },
+    { "name": "interface", "color": "5319e7", "description": "[Area] User-facing layer — UI, CLI, API endpoints, or SDK surface [issues, PRs]" },
+    { "name": "data", "color": "006b75", "description": "[Area] Database, storage, caching, or data models [issues, PRs]" },
+    { "name": "infra", "color": "e16f24", "description": "[Area] Build system, CI/CD, deployment, config, and DevOps [issues, PRs]" },
+    { "name": "testing", "color": "1a7f37", "description": "[Area] Unit tests, integration tests, E2E, and test tooling [issues, PRs]" }
+  ]
+}
