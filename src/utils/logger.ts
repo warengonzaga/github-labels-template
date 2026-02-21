@@ -1,19 +1,30 @@
+import { LogEngine, LogMode } from "@wgtechlabs/log-engine";
 import pc from "picocolors";
 
+// Configure log-engine: INFO mode, no ISO timestamp, with local time, log level, emoji
+LogEngine.configure({
+  mode: LogMode.INFO,
+  format: {
+    includeIsoTimestamp: false,
+    includeLocalTime: true,
+    includeEmoji: true,
+  },
+});
+
 export function success(msg: string) {
-  console.log(pc.green(`  ✓ ${msg}`));
+  LogEngine.log(msg);
 }
 
 export function error(msg: string) {
-  console.log(pc.red(`  ✗ ${msg}`));
+  LogEngine.error(msg);
 }
 
 export function warn(msg: string) {
-  console.log(pc.yellow(`  ⚠ ${msg}`));
+  LogEngine.warn(msg);
 }
 
 export function info(msg: string) {
-  console.log(pc.cyan(`  ℹ ${msg}`));
+  LogEngine.info(msg);
 }
 
 export function heading(msg: string) {
@@ -37,3 +48,5 @@ export function summary(counts: {
 
   console.log(`\n${pc.bold("Summary:")} ${parts.join(", ")}`);
 }
+
+export { LogEngine };
