@@ -4,7 +4,8 @@ import apply from "./commands/apply";
 import wipe from "./commands/wipe";
 import { showBanner, getVersion } from "./ui/banner";
 
-showBanner();
+const isHelp = process.argv.includes("--help") || process.argv.includes("-h");
+showBanner(isHelp);
 
 const main = defineCommand({
   meta: {

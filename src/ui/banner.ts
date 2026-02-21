@@ -41,24 +41,29 @@ export function getAuthor(): string {
 
 /**
  * Print the branded banner to stdout
+ * @param minimal - If true, only show logo and version (used with --help)
  */
-export function showBanner(): void {
+export function showBanner(minimal = false): void {
   console.log(pc.cyan("\n" + LOGO));
   console.log(
     `  ${pc.dim("v" + getVersion())} ${pc.dim("—")} ${pc.dim("Built by " + getAuthor())}`
   );
-  console.log(
-    `  ${pc.dim(pkg.description)}`
-  );
-  console.log();
-  console.log(
-    `  ${pc.yellow("Star")}        ${pc.cyan("https://gh.waren.build/github-labels-template")}`
-  );
-  console.log(
-    `  ${pc.green("Contribute")}  ${pc.cyan("https://gh.waren.build/github-labels-template/blob/main/CONTRIBUTING.md")}`
-  );
-  console.log(
-    `  ${pc.magenta("Sponsor")}     ${pc.cyan("https://warengonzaga.com/sponsor")}`
-  );
+
+  if (!minimal) {
+    console.log(
+      `  ${pc.dim(pkg.description)}`
+    );
+    console.log();
+    console.log(
+      `  ${pc.yellow("Star")}        ${pc.cyan("https://gh.waren.build/github-labels-template")}`
+    );
+    console.log(
+      `  ${pc.green("Contribute")}  ${pc.cyan("https://gh.waren.build/github-labels-template/blob/main/CONTRIBUTING.md")}`
+    );
+    console.log(
+      `  ${pc.magenta("Sponsor")}     ${pc.cyan("https://warengonzaga.com/sponsor")}`
+    );
+  }
+
   console.log();
 }
