@@ -2,16 +2,31 @@
 import { defineCommand, runMain } from "citty";
 import apply from "./commands/apply";
 import wipe from "./commands/wipe";
+import { showBanner, getVersion } from "./ui/banner";
+
+showBanner();
 
 const main = defineCommand({
   meta: {
     name: "ghlt",
-    version: "0.1.0",
+    version: getVersion(),
     description: "GitHub Labels Template — apply a curated set of labels to any repo using gh CLI.",
+  },
+  args: {
+    version: {
+      type: "boolean",
+      alias: "v",
+      description: "Show version number",
+    },
   },
   subCommands: {
     apply,
     wipe,
+  },
+  run({ args }) {
+    if (args.version) {
+      console.log(`ghlt v${getVersion()}`);
+    }
   },
 });
 
