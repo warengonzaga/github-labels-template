@@ -5,7 +5,7 @@
 
 A CLI tool to apply a curated set of GitHub labels to any repository using `gh` CLI.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: CC0-1.0](https://img.shields.io/badge/License-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 [![npm version](https://img.shields.io/npm/v/github-labels-template.svg)](https://www.npmjs.com/package/github-labels-template)
 
 ## Features
@@ -183,7 +183,7 @@ Contributions are welcome! This project follows the [Clean Commit](https://githu
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [CC0 1.0 Universal](LICENSE).
 
 ## Author
 
