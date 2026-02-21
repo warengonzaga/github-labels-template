@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ghlt — GitHub Labels Template</title>
+  <meta name="description" content="A CLI tool to apply a curated set of 20 GitHub labels to any repository. One command, zero config.">
+  <meta property="og:title" content="ghlt — GitHub Labels Template">
+  <meta property="og:description" content="Apply 20 curated GitHub labels to any repo with one command.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://warengonzaga.github.io/github-labels-template/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --bg-secondary: #161b22;
+      --bg-tertiary: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --accent: #016EEA;
+      --accent-dark: #013B84;
+      --accent-glow: rgba(1, 110, 234, 0.15);
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+
+    nav .logo span { color: var(--accent); }
+
+    nav .version {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      font-family: var(--mono);
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid rgba(1, 110, 234, 0.3);
+      border-radius: 100px;
+      padding: 2px 8px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    nav .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    nav .nav-links a {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 160px 0 100px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(1, 110, 234, 0.3);
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent-dark), var(--accent), #58a6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+
+    .install-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin-bottom: 32px;
+      font-family: var(--mono);
+      font-size: 0.95rem;
+    }
+
+    .install-box .prompt { color: var(--accent); user-select: none; }
+    .install-box code { color: var(--text); }
+
+    .install-box button {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-family: var(--font);
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .install-box button:hover { color: var(--text); border-color: var(--accent); }
+    .install-box button.copied { color: #3fb950; border-color: #3fb950; }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+      color: #fff;
+    }
+
+    .btn-primary:hover { opacity: 0.9; text-decoration: none; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-1px); }
+
+    /* ── Section ── */
+    section { padding: 80px 0; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .feature-card:hover { border-color: var(--accent); }
+
+    .feature-card .icon {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* ── Labels ── */
+    .labels-section { background: var(--bg-secondary); }
+
+    .label-categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .label-category {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .label-category h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .label-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .label-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.6;
+      white-space: nowrap;
+    }
+
+    .label-pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Quick Start ── */
+    .quickstart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .code-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .code-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .code-card-header .dot-red { width: 12px; height: 12px; border-radius: 50%; background: #f85149; }
+    .code-card-header .dot-yellow { width: 12px; height: 12px; border-radius: 50%; background: #d29922; }
+    .code-card-header .dot-green { width: 12px; height: 12px; border-radius: 50%; background: #3fb950; }
+    .code-card-header span { color: var(--text-muted); font-size: 0.8rem; margin-left: 8px; }
+
+    .code-card pre {
+      padding: 20px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .code-card .comment { color: var(--text-muted); }
+    .code-card .cmd { color: var(--accent); }
+    .code-card .arg { color: #79c0ff; }
+    .code-card .flag { color: #d2a8ff; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    footer .footer-links a {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    footer .footer-links a:hover { color: var(--text); }
+
+    footer .footer-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .footer-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .footer-action-btn:hover { text-decoration: none; transform: translateY(-1px); }
+
+    .footer-action-btn.star {
+      color: #e3b341;
+      border: 1px solid rgba(227, 179, 65, 0.3);
+      background: rgba(227, 179, 65, 0.08);
+    }
+
+    .footer-action-btn.star:hover { border-color: #e3b341; background: rgba(227, 179, 65, 0.15); }
+
+    .footer-action-btn.sponsor {
+      color: #db61a2;
+      border: 1px solid rgba(219, 97, 162, 0.3);
+      background: rgba(219, 97, 162, 0.08);
+    }
+
+    .footer-action-btn.sponsor:hover { border-color: #db61a2; background: rgba(219, 97, 162, 0.15); }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .hero { padding: 120px 0 60px; }
+      section { padding: 60px 0; }
+      .install-box { flex-wrap: wrap; justify-content: center; }
+      nav .nav-links { gap: 16px; }
+      nav .nav-links a { font-size: 0.8rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .label-categories { grid-template-columns: 1fr; }
+      .quickstart-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <div class="logo">🏷️ <span>ghlt</span> <span class="version">v0.3.0</span></div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#labels">Labels</a></li>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="https://github.com/warengonzaga/github-labels-template" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">20 labels &middot; 5 categories &middot; 1 command</div>
+      <h1>
+        <span class="gradient">GitHub Labels</span><br>Template
+      </h1>
+      <p>A curated set of GitHub labels for any project &mdash; apply them all with a single CLI command.</p>
+      <div class="install-box">
+        <span class="prompt">$</span>
+        <code id="install-cmd">npx github-labels-template apply</code>
+        <button onclick="copyInstall()" id="copy-btn">Copy</button>
+      </div>
+      <div class="hero-buttons">
+        <a href="https://github.com/warengonzaga/github-labels-template" class="btn btn-primary" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.npmjs.com/package/github-labels-template" class="btn btn-outline" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M0 0v16h16V0H0zm13 13H8V5h5v8zM3 3h10v2H3V3z"/></svg>
+          npm
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Features</h2>
+        <p>Everything you need to standardize labels across your projects</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="icon">🏷️</span>
+          <h3>20 Curated Labels</h3>
+          <p>Organized across 5 categories &mdash; type, status, community, resolution, and area. Covers every workflow need.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🚀</span>
+          <h3>One Command Setup</h3>
+          <p>Run <code>ghlt apply</code> and all 20 labels are created on your repo. No config files, no setup.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🔍</span>
+          <h3>Auto-Detect Repo</h3>
+          <p>Automatically detects the current repository from your git remote. No need to specify <code>--repo</code>.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🔄</span>
+          <h3>Smart Conflict Handling</h3>
+          <p>Skips existing labels by default. Use <code>--force</code> to update them to match the template.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🧹</span>
+          <h3>Wipe Command</h3>
+          <p>Remove all existing labels with a single command. Confirmation prompt keeps you safe.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">✅</span>
+          <h3>Pre-Flight Checks</h3>
+          <p>Validates that <code>gh</code> CLI is installed and authenticated before doing anything.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">📊</span>
+          <h3>Clear Output</h3>
+          <p>Color-coded status for every label &mdash; created, updated, skipped, or failed &mdash; with a summary report.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🌐</span>
+          <h3>Dual Runtime</h3>
+          <p>Works with both <code>npx</code> and <code>bunx</code>. Install globally or run on-demand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Labels -->
+  <section id="labels" class="labels-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>The Label Set</h2>
+        <p>20 labels designed to cover every project workflow</p>
+      </div>
+      <div class="label-categories">
+
+        <div class="label-category">
+          <h3>Type</h3>
+          <div class="label-pills">
+            <span class="label-pill" style="background: rgba(215,58,74,0.15); color: #f78166;"><span class="dot" style="background: #d73a4a;"></span>bug</span>
+            <span class="label-pill" style="background: rgba(26,127,55,0.15); color: #56d364;"><span class="dot" style="background: #1a7f37;"></span>enhancement</span>
+            <span class="label-pill" style="background: rgba(0,117,202,0.15); color: #58a6ff;"><span class="dot" style="background: #0075ca;"></span>documentation</span>
+            <span class="label-pill" style="background: rgba(137,87,229,0.15); color: #bc8cff;"><span class="dot" style="background: #8957e5;"></span>refactor</span>
+            <span class="label-pill" style="background: rgba(227,121,92,0.15); color: #f0a070;"><span class="dot" style="background: #e3795c;"></span>performance</span>
+            <span class="label-pill" style="background: rgba(212,167,44,0.15); color: #e3b341;"><span class="dot" style="background: #d4a72c;"></span>security</span>
+          </div>
+        </div>
+
+        <div class="label-category">
+          <h3>Status</h3>
+          <div class="label-pills">
+            <span class="label-pill" style="background: rgba(207,34,46,0.15); color: #f85149;"><span class="dot" style="background: #cf222e;"></span>blocked</span>
+            <span class="label-pill" style="background: rgba(225,111,36,0.15); color: #f0883e;"><span class="dot" style="background: #e16f24;"></span>needs triage</span>
+            <span class="label-pill" style="background: rgba(26,126,199,0.15); color: #58a6ff;"><span class="dot" style="background: #1a7ec7;"></span>awaiting response</span>
+            <span class="label-pill" style="background: rgba(45,164,78,0.15); color: #56d364;"><span class="dot" style="background: #2da44e;"></span>ready</span>
+          </div>
+        </div>
+
+        <div class="label-category">
+          <h3>Community</h3>
+          <div class="label-pills">
+            <span class="label-pill" style="background: rgba(112,87,255,0.15); color: #bc8cff;"><span class="dot" style="background: #7057ff;"></span>good first issue</span>
+            <span class="label-pill" style="background: rgba(14,138,22,0.15); color: #56d364;"><span class="dot" style="background: #0e8a16;"></span>help wanted</span>
+          </div>
+        </div>
+
+        <div class="label-category">
+          <h3>Resolution</h3>
+          <div class="label-pills">
+            <span class="label-pill" style="background: rgba(207,211,215,0.12); color: #8b949e;"><span class="dot" style="background: #cfd3d7;"></span>duplicate</span>
+            <span class="label-pill" style="background: rgba(207,211,215,0.12); color: #8b949e;"><span class="dot" style="background: #cfd3d7;"></span>invalid</span>
+            <span class="label-pill" style="background: rgba(207,211,215,0.12); color: #8b949e;"><span class="dot" style="background: #cfd3d7;"></span>wontfix</span>
+          </div>
+        </div>
+
+        <div class="label-category">
+          <h3>Area</h3>
+          <div class="label-pills">
+            <span class="label-pill" style="background: rgba(0,82,204,0.15); color: #58a6ff;"><span class="dot" style="background: #0052cc;"></span>core</span>
+            <span class="label-pill" style="background: rgba(83,25,231,0.15); color: #bc8cff;"><span class="dot" style="background: #5319e7;"></span>interface</span>
+            <span class="label-pill" style="background: rgba(0,107,117,0.15); color: #39d5cf;"><span class="dot" style="background: #006b75;"></span>data</span>
+            <span class="label-pill" style="background: rgba(225,111,36,0.15); color: #f0883e;"><span class="dot" style="background: #e16f24;"></span>infra</span>
+            <span class="label-pill" style="background: rgba(26,127,55,0.15); color: #56d364;"><span class="dot" style="background: #1a7f37;"></span>testing</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section id="quickstart">
+    <div class="container">
+      <div class="section-header">
+        <h2>Quick Start</h2>
+        <p>Get up and running in seconds</p>
+      </div>
+      <div class="quickstart-grid">
+
+        <div class="code-card">
+          <div class="code-card-header">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+            <span>Apply labels</span>
+          </div>
+          <pre><span class="comment"># Apply to current repo</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span>
+
+<span class="comment"># Apply to a specific repo</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--repo</span> owner/repo
+
+<span class="comment"># Overwrite existing labels</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--force</span></pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-card-header">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+            <span>Wipe labels</span>
+          </div>
+          <pre><span class="comment"># Remove all labels (with prompt)</span>
+<span class="cmd">ghlt</span> <span class="arg">wipe</span>
+
+<span class="comment"># Skip confirmation</span>
+<span class="cmd">ghlt</span> <span class="arg">wipe</span> <span class="flag">--yes</span>
+
+<span class="comment"># Clean slate workflow</span>
+<span class="cmd">ghlt</span> <span class="arg">wipe</span> <span class="flag">--yes</span> && <span class="cmd">ghlt</span> <span class="arg">apply</span></pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-card-header">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+            <span>Install globally</span>
+          </div>
+          <pre><span class="comment"># npm</span>
+<span class="cmd">npm</span> <span class="arg">install</span> <span class="flag">-g</span> github-labels-template
+
+<span class="comment"># bun</span>
+<span class="cmd">bun</span> <span class="arg">install</span> <span class="flag">-g</span> github-labels-template
+
+<span class="comment"># Then use anywhere</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span></pre>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/warengonzaga/github-labels-template" target="_blank">GitHub</a>
+        <a href="https://www.npmjs.com/package/github-labels-template" target="_blank">npm</a>
+        <a href="https://github.com/warengonzaga/github-labels-template/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+        <a href="https://github.com/warengonzaga/github-labels-template/blob/main/LICENSE" target="_blank">CC0 1.0 License</a>
+      </div>
+      <div class="footer-actions">
+        <a href="https://github.com/warengonzaga/github-labels-template/stargazers" class="footer-action-btn star" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+          Star on GitHub
+        </a>
+        <a href="https://github.com/sponsors/warengonzaga" class="footer-action-btn sponsor" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.565 20.565 0 008 13.393a20.561 20.561 0 003.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.749.749 0 01-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5zM8 14.25l-.345.666-.002-.001-.006-.003-.018-.01a7.643 7.643 0 01-.31-.17 22.075 22.075 0 01-3.434-2.414C2.045 10.731 0 8.35 0 5.5 0 2.836 2.086 1 4.25 1 5.797 1 7.153 1.802 8 3.02 8.847 1.802 10.203 1 11.75 1 13.914 1 16 2.836 16 5.5c0 2.85-2.045 5.231-3.885 6.818a22.08 22.08 0 01-3.744 2.584l-.018.01-.006.003h-.002L8 14.25z"/></svg>
+          Sponsor
+        </a>
+      </div>
+      <p>Built by <a href="https://github.com/warengonzaga">Waren Gonzaga</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstall() {
+      const cmd = document.getElementById('install-cmd').textContent;
+      navigator.clipboard.writeText(cmd).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
