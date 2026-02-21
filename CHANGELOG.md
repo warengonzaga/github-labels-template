@@ -10,6 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [0.4.0] - 2026-02-21
+
+### Added
+
+- add dependencies for figlet and log-engine in bun.lock
+- add CLI banner with ASCII art logo and version display
+- implement version display and update command metadata
+
+### Changed
+
+- enhance showBanner to support minimal display for help
+- add test script and update dependencies in package.json
+- refactor logging functions to use LogEngine for consistency
+- pause stdin before resolving user input for confirmation
+
 ## [0.3.0] - 2026-02-21
 
 ### Added
