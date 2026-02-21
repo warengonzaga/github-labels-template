@@ -12,6 +12,7 @@
   "scripts": {
     "build": "bun build src/index.ts --outfile dist/index.js --target node --packages external",
     "dev": "bun src/index.ts",
+    "preview": "bun src/index.ts preview",
     "test": "bun test"
   },
   "engines": {
@@ -26,7 +27,7 @@
     "gh"
   ],
   "author": "Waren Gonzaga",
-  "license": "MIT",
+  "license": "CC0-1.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/warengonzaga/github-labels-template.git"
