@@ -147,6 +147,16 @@ ghlt wipe --repo owner/repo
 ghlt wipe --yes
 ```
 
+### Preview Landing Page
+
+```bash
+# Preview the landing page locally
+ghlt preview
+
+# Use a custom port
+ghlt preview --port 8080
+```
+
 ### Common Workflows
 
 ```bash
@@ -233,7 +243,7 @@ Broad software layers — universal across any project.
 ghlt — GitHub Labels Template CLI
 
 USAGE
-  ghlt [OPTIONS] apply|wipe|migrate|generate
+  ghlt [OPTIONS] apply|wipe|migrate|generate|preview
 
 OPTIONS
   -v, --version              Show version number
@@ -243,6 +253,7 @@ COMMANDS
   wipe       Remove all existing labels from a repository
   migrate    Wipe all existing labels and apply the template (clean slate)
   generate   Generate custom labels using AI (requires GitHub Copilot)
+  preview    Preview the landing page locally in your browser
 
 OPTIONS (apply)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
@@ -264,6 +275,9 @@ OPTIONS (generate)
 OPTIONS (wipe)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
   -y, --yes                  Skip confirmation prompt
+
+OPTIONS (preview)
+  -p, --port <number>        Port to serve on (default: 3000)
 ```
 
 ## Testing
