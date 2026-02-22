@@ -4,6 +4,7 @@ import apply from "./commands/apply";
 import wipe from "./commands/wipe";
 import preview from "./commands/preview";
 import generate from "./commands/generate";
+import migrate from "./commands/migrate";
 import { showBanner, getVersion } from "./ui/banner";
 
 const isHelp = process.argv.includes("--help") || process.argv.includes("-h");
@@ -25,6 +26,7 @@ const main = defineCommand({
   subCommands: {
     apply,
     wipe,
+    migrate,
     preview,
     generate,
   },

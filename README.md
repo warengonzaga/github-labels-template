@@ -116,6 +116,24 @@ The generator will:
 4. Let you pick one, refine with feedback, or regenerate
 5. Save to `labels-custom.json` and optionally apply to a repo
 
+### Migrate Labels
+
+Wipe all existing labels and apply the template in one step (clean slate).
+
+```bash
+# Migrate: wipe + apply (with confirmation prompt)
+ghlt migrate
+
+# Migrate a specific repo
+ghlt migrate --repo owner/repo
+
+# Skip confirmation prompt
+ghlt migrate --yes
+
+# Include custom labels in the migration
+ghlt migrate --custom
+```
+
 ### Wipe Labels
 
 ```bash
@@ -132,8 +150,8 @@ ghlt wipe --yes
 ### Common Workflows
 
 ```bash
-# Clean slate: wipe defaults, then apply template
-ghlt wipe --yes && ghlt apply
+# Clean slate with one command
+ghlt migrate --yes
 
 # Update a specific repo to match the template
 ghlt apply --repo owner/repo --force
@@ -203,7 +221,7 @@ Broad software layers — universal across any project.
 ghlt — GitHub Labels Template CLI
 
 USAGE
-  ghlt [OPTIONS] apply|wipe|generate
+  ghlt [OPTIONS] apply|wipe|migrate|generate
 
 OPTIONS
   -v, --version              Show version number
@@ -211,6 +229,7 @@ OPTIONS
 COMMANDS
   apply      Apply labels from the template to a repository
   wipe       Remove all existing labels from a repository
+  migrate    Wipe all existing labels and apply the template (clean slate)
   generate   Generate custom labels using AI (requires GitHub Copilot)
 
 OPTIONS (apply)
@@ -218,6 +237,11 @@ OPTIONS (apply)
   -f, --force                Overwrite existing labels
   -l, --label <name>         Apply specific label(s) by name (comma-separated)
   -c, --category <name>      Apply labels from specific category(ies) (comma-separated)
+      --custom               Include custom labels from labels-custom.json
+
+OPTIONS (migrate)
+  -r, --repo <owner/repo>   Target repository (default: auto-detect)
+  -y, --yes                  Skip confirmation prompt
       --custom               Include custom labels from labels-custom.json
 
 OPTIONS (generate)
