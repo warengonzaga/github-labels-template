@@ -193,6 +193,10 @@ export default defineCommand({
 
       // User picked a label
       const pickIndex = parseInt(choice.replace("pick:", ""), 10);
+      if (Number.isNaN(pickIndex) || pickIndex < 0 || pickIndex >= suggestions.length) {
+        error("Invalid selection. Please pick one of the listed labels.");
+        continue;
+      }
       selectedLabel = suggestions[pickIndex];
     }
 
