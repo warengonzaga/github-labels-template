@@ -11,6 +11,7 @@ import { success, error, warn, info, heading, summary } from "../utils/logger";
 import { loadCustomLabels } from "../utils/custom-labels";
 import labels from "../labels.json";
 import type { Label } from "../utils/gh";
+import { confirmPrompt } from "../utils/confirm";
 import pc from "picocolors";
 
 export default defineCommand({
@@ -105,24 +106,10 @@ export default defineCommand({
 
     // Confirmation
     if (!args.yes) {
-      console.log(
-        `\n${pc.bold(pc.yellow(`This will delete all ${existing.length} existing labels from ${repo} and apply ${templateCount} template labels.`))}`
+      const confirmed = await confirmPrompt(
+        pc.bold(pc.yellow(`This will delete all ${existing.length} existing labels from ${repo} and apply ${templateCount} template labels.`))
       );
-      process.stdout.write(`${pc.dim("Continue? [y/N] ")}`);
-
-      const response = await new Promise<string>((resolve) => {
-        process.stdin.setEncoding("utf-8");
-        process.stdin.once("data", (data) => {
-          process.stdin.pause();
-          resolve(data.toString().trim());
-        });
-        process.stdin.resume();
-      });
-
-      if (response.toLowerCase() !== "y") {
-        info("Aborted.");
-        return;
-      }
+      if (!confirmed) return;
     }
 
     // Phase 1: Wipe
