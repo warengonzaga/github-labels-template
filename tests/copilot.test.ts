@@ -128,8 +128,16 @@ Hope this helps!`;
 
     it("should handle unknown categories gracefully", () => {
       const prompt = buildSystemPrompt("nonexistent", 3);
+      // Should include the unknown category name
       expect(prompt).toContain("nonexistent");
-      // Should not throw
+      // Fallback should still produce a structurally valid prompt
+      expect(typeof prompt).toBe("string");
+      expect(prompt.length).toBeGreaterThan(0);
+      // It should still respect the requested count
+      expect(prompt).toContain("exactly 3");
+      // And should not contain obvious template errors
+      expect(prompt).not.toContain("undefined");
+      expect(prompt).not.toContain("null");
     });
   });
 
