@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [0.6.1] - 2026-02-22
+
+### Removed
+
+- eliminate unused preview command from main command list
+
 ## [0.6.0] - 2026-02-22
 
 ### Added
