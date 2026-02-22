@@ -3,7 +3,7 @@
 ![GitHub Repo Banner](https://ghrb.waren.build/banner?header=GitHub+Labels+Template+%F0%9F%8F%B7%EF%B8%8F&subheader=A+curated+set+of+GitHub+labels+for+any+project+%E2%80%94+CLI-ready.&bg=013B84-016EEA&color=FFFFFF&headerfont=Google+Sans+Code&subheaderfont=Sour+Gummy&support=true)
 <!-- Created with GitHub Repo Banner by Waren Gonzaga: https://ghrb.waren.build -->
 
-A CLI tool to apply a curated set of GitHub labels to any repository using `gh` CLI.
+A CLI tool to apply a curated set of GitHub labels to any repository using `gh` CLI. Following the **Clean Labels** convention by [wgtechlabs](https://github.com/AnyType).
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 [![npm version](https://img.shields.io/npm/v/github-labels-template.svg)](https://www.npmjs.com/package/github-labels-template)
@@ -92,7 +92,7 @@ ghlt apply --custom --category type
 
 ### Generate Labels (AI)
 
-Generate custom labels using GitHub Copilot. Requires a [GitHub Copilot](https://github.com/features/copilot) subscription.
+Generate custom labels using GitHub Copilot — following the Clean Labels convention. Requires a [GitHub Copilot](https://github.com/features/copilot) subscription.
 
 ```bash
 # Interactive label generator
@@ -156,6 +156,16 @@ ghlt migrate --yes
 # Update a specific repo to match the template
 ghlt apply --repo owner/repo --force
 ```
+
+## Clean Labels Convention
+
+This project follows the **Clean Labels** convention by [wgtechlabs](https://github.com/AnyType) — a standardized labeling format for GitHub repositories. Every label uses a consistent structure:
+
+```
+name · color · [Category] Description [scope]
+```
+
+Where `scope` is `[issues]`, `[PRs]`, or `[issues, PRs]`.
 
 ## Label Template
 
