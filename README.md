@@ -3,14 +3,14 @@
 ![GitHub Repo Banner](https://ghrb.waren.build/banner?header=GitHub+Labels+Template+%F0%9F%8F%B7%EF%B8%8F&subheader=A+curated+set+of+GitHub+labels+for+any+project+%E2%80%94+CLI-ready.&bg=013B84-016EEA&color=FFFFFF&headerfont=Google+Sans+Code&subheaderfont=Sour+Gummy&support=true)
 <!-- Created with GitHub Repo Banner by Waren Gonzaga: https://ghrb.waren.build -->
 
-A CLI tool to apply a curated set of GitHub labels to any repository using `gh` CLI.
+A CLI tool to apply a curated set of GitHub labels to any repository using `gh` CLI. Following the **Clean Labels** convention by [wgtechlabs](https://github.com/AnyType).
 
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 [![npm version](https://img.shields.io/npm/v/github-labels-template.svg)](https://www.npmjs.com/package/github-labels-template)
 
 ## Features
 
-- 🏷️ **20 Curated Labels**: Organized across 5 categories — type, status, community, resolution, and area
+- 🏷️ **23 Curated Labels**: Organized across 5 categories — type, status, community, resolution, and area
 - 🚀 **One Command Setup**: Apply all labels to any repo with `ghlt apply`
 - 🔍 **Auto-Detect Repo**: Automatically detects the current repository from git remote
 - 🔄 **Smart Conflict Handling**: Skips existing labels by default, `--force` to update
@@ -18,6 +18,7 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 - ✅ **Pre-Flight Checks**: Validates `gh` CLI is installed and authenticated before doing anything
 - 📊 **Clear Output**: Structured logging powered by [@wgtechlabs/log-engine](https://github.com/wgtechlabs/log-engine) with color-coded levels and emoji
 - 🎨 **ASCII Banner**: Beautiful ANSI Shadow figlet banner with version and author info
+- 🤖 **AI Label Generator**: Generate custom labels using GitHub Copilot — interactive pick, refine, and apply
 - 🌐 **Dual Runtime**: Works with both `npx` and `bunx`
 
 ## Quick Start
@@ -30,7 +31,7 @@ npx github-labels-template apply
 bunx github-labels-template apply
 ```
 
-That's it. All 20 labels are applied to the current repo.
+That's it. All 23 labels are applied to the current repo.
 
 ## Installation
 
@@ -48,6 +49,7 @@ ghlt apply
 ## Prerequisites
 
 - [GitHub CLI](https://cli.github.com) (`gh`) installed and authenticated
+- [GitHub Copilot](https://github.com/features/copilot) subscription (required for `generate` command only)
 
 ## Usage
 
@@ -62,6 +64,74 @@ ghlt apply --repo owner/repo
 
 # Overwrite existing labels with template values
 ghlt apply --force
+
+# Apply only a specific label
+ghlt apply --label bug
+
+# Apply specific labels (comma-separated)
+ghlt apply --label "bug,enhancement"
+
+# Apply all labels from a category
+ghlt apply --category type
+
+# Apply labels from multiple categories
+ghlt apply --category "type,status"
+
+# Combine: apply all community labels + the "bug" label
+ghlt apply --category community --label bug
+
+# Combine with force and repo
+ghlt apply --category type --force --repo owner/repo
+
+# Include custom labels from labels-custom.json
+ghlt apply --custom
+
+# Apply only custom labels from a specific category
+ghlt apply --custom --category type
+```
+
+### Generate Labels (AI)
+
+Generate custom labels using GitHub Copilot — following the Clean Labels convention. Requires a [GitHub Copilot](https://github.com/features/copilot) subscription.
+
+```bash
+# Interactive label generator
+ghlt generate
+
+# Pre-select a category
+ghlt generate --category type
+
+# Generate and apply to a specific repo
+ghlt generate --repo owner/repo
+
+# Use a specific Copilot model (advanced)
+ghlt generate --model gpt-4.1
+ghlt generate --model claude-sonnet-4
+```
+
+The generator will:
+1. Ask you to pick a category (type, status, community, resolution, area)
+2. Ask you to describe the label you need
+3. Generate 3 AI-powered suggestions following the template conventions
+4. Let you pick one, refine with feedback, or regenerate
+5. Save to `labels-custom.json` and optionally apply to a repo
+
+### Migrate Labels
+
+Wipe all existing labels and apply the template in one step (clean slate).
+
+```bash
+# Migrate: wipe + apply (with confirmation prompt)
+ghlt migrate
+
+# Migrate a specific repo
+ghlt migrate --repo owner/repo
+
+# Skip confirmation prompt
+ghlt migrate --yes
+
+# Include custom labels in the migration
+ghlt migrate --custom
 ```
 
 ### Wipe Labels
@@ -77,15 +147,35 @@ ghlt wipe --repo owner/repo
 ghlt wipe --yes
 ```
 
+### Preview Landing Page
+
+```bash
+# Preview the landing page locally
+ghlt preview
+
+# Use a custom port
+ghlt preview --port 8080
+```
+
 ### Common Workflows
 
 ```bash
-# Clean slate: wipe defaults, then apply template
-ghlt wipe --yes && ghlt apply
+# Clean slate with one command
+ghlt migrate --yes
 
 # Update a specific repo to match the template
 ghlt apply --repo owner/repo --force
 ```
+
+## Clean Labels Convention
+
+This project follows the **Clean Labels** convention by [wgtechlabs](https://github.com/AnyType) — a standardized labeling format for GitHub repositories. Every label uses a consistent structure:
+
+```
+name · color · [Category] Description [scope]
+```
+
+Where `scope` is `[issues]`, `[PRs]`, or `[issues, PRs]`.
 
 ## Label Template
 
@@ -121,6 +211,9 @@ Signals for open source contributors.
 |------|-------|-------------|
 | `good first issue` | ![#7057ff](https://placehold.co/12x12/7057ff/7057ff.png) `7057ff` | Good for newcomers — well-scoped and documented |
 | `help wanted` | ![#0e8a16](https://placehold.co/12x12/0e8a16/0e8a16.png) `0e8a16` | Open for community contribution |
+| `maintainer only` | ![#b60205](https://placehold.co/12x12/b60205/b60205.png) `b60205` | Reserved for maintainers — not open for external contribution |
+| `hacktoberfest` | ![#ff7518](https://placehold.co/12x12/ff7518/ff7518.png) `ff7518` | Participating in Hacktoberfest — open source celebration |
+| `hacktoberfest-accepted` | ![#16a085](https://placehold.co/12x12/16a085/16a085.png) `16a085` | PR accepted for Hacktoberfest contribution |
 
 ### Resolution Labels
 
@@ -150,22 +243,41 @@ Broad software layers — universal across any project.
 ghlt — GitHub Labels Template CLI
 
 USAGE
-  ghlt [OPTIONS] apply|wipe
+  ghlt [OPTIONS] apply|wipe|migrate|generate|preview
 
 OPTIONS
   -v, --version              Show version number
 
 COMMANDS
-  apply    Apply labels from the template to a repository
-  wipe     Remove all existing labels from a repository
+  apply      Apply labels from the template to a repository
+  wipe       Remove all existing labels from a repository
+  migrate    Wipe all existing labels and apply the template (clean slate)
+  generate   Generate custom labels using AI (requires GitHub Copilot)
+  preview    Preview the landing page locally in your browser
 
 OPTIONS (apply)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
   -f, --force                Overwrite existing labels
+  -l, --label <name>         Apply specific label(s) by name (comma-separated)
+  -c, --category <name>      Apply labels from specific category(ies) (comma-separated)
+      --custom               Include custom labels from labels-custom.json
+
+OPTIONS (migrate)
+  -r, --repo <owner/repo>   Target repository (default: auto-detect)
+  -y, --yes                  Skip confirmation prompt
+      --custom               Include custom labels from labels-custom.json
+
+OPTIONS (generate)
+  -r, --repo <owner/repo>   Target repository for optional apply step
+  -c, --category <name>      Pre-select a category (type, status, community, resolution, area)
+  -m, --model <model>        Copilot model to use (default: your Copilot config)
 
 OPTIONS (wipe)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
   -y, --yes                  Skip confirmation prompt
+
+OPTIONS (preview)
+  -p, --port <number>        Port to serve on (default: 3000)
 ```
 
 ## Testing

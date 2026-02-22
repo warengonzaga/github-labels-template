@@ -4,19 +4,21 @@ import {
   checkGhAuth,
   detectRepo,
   listLabels,
+  deleteLabel,
   createLabel,
-  editLabel,
 } from "../utils/gh";
 import { success, error, warn, info, heading, summary } from "../utils/logger";
-import { filterLabels } from "../utils/filter";
 import { loadCustomLabels } from "../utils/custom-labels";
 import labels from "../labels.json";
 import type { Label } from "../utils/gh";
+import { confirmPrompt } from "../utils/confirm";
+import pc from "picocolors";
 
 export default defineCommand({
   meta: {
-    name: "apply",
-    description: "Apply labels from the template to a repository",
+    name: "migrate",
+    description:
+      "Wipe all existing labels and apply the template (clean slate)",
   },
   args: {
     repo: {
@@ -24,23 +26,11 @@ export default defineCommand({
       alias: "r",
       description: "Target repository (owner/repo). Defaults to current repo.",
     },
-    force: {
+    yes: {
       type: "boolean",
-      alias: "f",
+      alias: "y",
       default: false,
-      description: "Overwrite existing labels with the same name",
-    },
-    label: {
-      type: "string",
-      alias: "l",
-      description:
-        'Apply specific label(s) by name. Comma-separated for multiple (e.g., --label "bug,enhancement")',
-    },
-    category: {
-      type: "string",
-      alias: "c",
-      description:
-        'Apply labels from specific category(ies). Comma-separated for multiple (e.g., --category "type,status")',
+      description: "Skip confirmation prompt",
     },
     custom: {
       type: "boolean",
@@ -72,11 +62,7 @@ export default defineCommand({
 
     info(`Target: ${repo}`);
 
-    // Fetch existing labels
-    const existing = await listLabels(repo);
-    const existingSet = new Set(existing.map((n) => n.toLowerCase()));
-
-    // Merge custom labels if --custom flag is set
+    // Build the label pool
     const labelPool: Record<string, Label[]> = {
       ...(labels as Record<string, Label[]>),
     };
@@ -110,61 +96,62 @@ export default defineCommand({
       }
     }
 
-    // Filter labels by --label and --category flags
-    const { entries: filteredEntries, warnings } = filterLabels(labelPool, {
-      label: args.label,
-      category: args.category,
-    });
+    const templateCount = Object.values(labelPool).reduce(
+      (sum, arr) => sum + arr.length,
+      0
+    );
 
-    for (const w of warnings) {
-      warn(w);
+    // Fetch existing labels
+    const existing = await listLabels(repo);
+
+    // Confirmation
+    if (!args.yes) {
+      const confirmed = await confirmPrompt(
+        pc.bold(pc.yellow(`This will delete all ${existing.length} existing labels from ${repo} and apply ${templateCount} template labels.`))
+      );
+      if (!confirmed) return;
     }
 
-    if (args.category) {
-      info(`Applying labels from category: ${args.category}`);
-    }
-    if (args.label) {
-      info(`Applying specific labels: ${args.label}`);
+    // Phase 1: Wipe
+    const wipeCounts = { deleted: 0, failed: 0 };
+
+    if (existing.length > 0) {
+      heading("Wiping Existing Labels");
+
+      for (const name of existing) {
+        const ok = await deleteLabel(repo, name);
+        if (ok) {
+          success(`${name} (deleted)`);
+          wipeCounts.deleted++;
+        } else {
+          error(`${name} (delete failed)`);
+          wipeCounts.failed++;
+        }
+      }
+
+      summary(wipeCounts);
+    } else {
+      info("No existing labels to wipe.");
     }
 
-    if (filteredEntries.length === 0) {
-      warn("No labels matched the specified filter(s).");
-      return;
-    }
+    // Phase 2: Apply
+    const applyCounts = { created: 0, failed: 0 };
 
-    const counts = { created: 0, updated: 0, skipped: 0, failed: 0 };
-
-    for (const [category, categoryLabels] of filteredEntries) {
+    for (const [category, categoryLabels] of Object.entries(labelPool)) {
       heading(`${category.charAt(0).toUpperCase() + category.slice(1)} Labels`);
 
       for (const label of categoryLabels) {
-        const exists = existingSet.has(label.name.toLowerCase());
-
-        if (exists && args.force) {
-          const ok = await editLabel(repo, label);
-          if (ok) {
-            success(`${label.name} (updated)`);
-            counts.updated++;
-          } else {
-            error(`${label.name} (update failed)`);
-            counts.failed++;
-          }
-        } else if (exists) {
-          warn(`${label.name} (already exists, use --force to update)`);
-          counts.skipped++;
+        const ok = await createLabel(repo, label);
+        if (ok) {
+          success(`${label.name} (created)`);
+          applyCounts.created++;
         } else {
-          const ok = await createLabel(repo, label);
-          if (ok) {
-            success(`${label.name} (created)`);
-            counts.created++;
-          } else {
-            error(`${label.name} (create failed)`);
-            counts.failed++;
-          }
+          error(`${label.name} (create failed)`);
+          applyCounts.failed++;
         }
       }
     }
 
-    summary(counts);
+    summary(applyCounts);
   },
 });

@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ghlt — GitHub Labels Template</title>
-  <meta name="description" content="A CLI tool to apply a curated set of 20 GitHub labels to any repository. One command, zero config.">
-  <meta property="og:title" content="ghlt — GitHub Labels Template">
-  <meta property="og:description" content="Apply 20 curated GitHub labels to any repo with one command.">
+  <title>ghlt — GitHub Labels Template | Clean Labels by AnyType</title>
+  <meta name="description" content="A CLI tool to apply 23 curated GitHub labels to any repository. AI-powered label generation with GitHub Copilot. Clean Labels convention by AnyType.">
+  <meta property="og:title" content="ghlt — GitHub Labels Template | Clean Labels by AnyType">
+  <meta property="og:description" content="Apply 23 curated GitHub labels to any repo with one command. AI-powered generation via Copilot SDK.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://warengonzaga.github.io/github-labels-template/">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏷️</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -27,6 +27,9 @@
       --accent: #016EEA;
       --accent-dark: #013B84;
       --accent-glow: rgba(1, 110, 234, 0.15);
+      --copilot: #a371f7;
+      --copilot-glow: rgba(163, 113, 247, 0.15);
+      --copilot-border: rgba(163, 113, 247, 0.3);
       --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --mono: 'JetBrains Mono', 'Cascadia Code', 'Fira Code', monospace;
     }
@@ -126,7 +129,7 @@
 
     .hero h1 {
       font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 700;
+      font-weight: 800;
       line-height: 1.1;
       margin-bottom: 20px;
       letter-spacing: -0.02em;
@@ -142,8 +145,19 @@
     .hero p {
       font-size: 1.2rem;
       color: var(--text-muted);
-      max-width: 560px;
-      margin: 0 auto 40px;
+      max-width: 620px;
+      margin: 0 auto 16px;
+    }
+
+    .hero .hero-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    .hero .hero-sub a {
+      color: var(--copilot);
+      font-weight: 600;
     }
 
     .install-box {
@@ -211,6 +225,13 @@
 
     .btn-outline:hover { border-color: var(--accent); text-decoration: none; transform: translateY(-1px); }
 
+    .btn-copilot {
+      background: linear-gradient(135deg, #7c3aed, var(--copilot));
+      color: #fff;
+    }
+
+    .btn-copilot:hover { opacity: 0.9; text-decoration: none; transform: translateY(-1px); }
+
     /* ── Section ── */
     section { padding: 80px 0; }
 
@@ -248,6 +269,13 @@
 
     .feature-card:hover { border-color: var(--accent); }
 
+    .feature-card.featured {
+      border-color: var(--copilot-border);
+      background: linear-gradient(135deg, var(--bg-secondary), rgba(163, 113, 247, 0.05));
+    }
+
+    .feature-card.featured:hover { border-color: var(--copilot); }
+
     .feature-card .icon {
       font-size: 1.5rem;
       margin-bottom: 12px;
@@ -265,6 +293,134 @@
       font-size: 0.9rem;
       line-height: 1.5;
     }
+
+    .feature-card .copilot-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--copilot);
+      background: var(--copilot-glow);
+      border: 1px solid var(--copilot-border);
+      border-radius: 100px;
+      padding: 2px 8px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── AI Section ── */
+    .ai-section {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(ellipse, rgba(163, 113, 247, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .ai-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .ai-content h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .ai-content .ai-subtitle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--copilot);
+      margin-bottom: 24px;
+    }
+
+    .ai-content .ai-subtitle svg { flex-shrink: 0; }
+
+    .ai-content p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .ai-bullets {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .ai-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .ai-bullets li .bullet-icon {
+      color: var(--copilot);
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .ai-terminal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .ai-terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ai-terminal-header .dot-red { width: 12px; height: 12px; border-radius: 50%; background: #f85149; }
+    .ai-terminal-header .dot-yellow { width: 12px; height: 12px; border-radius: 50%; background: #d29922; }
+    .ai-terminal-header .dot-green { width: 12px; height: 12px; border-radius: 50%; background: #3fb950; }
+    .ai-terminal-header span { color: var(--text-muted); font-size: 0.8rem; margin-left: 8px; }
+
+    .ai-terminal pre {
+      padding: 24px;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .ai-terminal .prompt-line { color: var(--text-muted); }
+    .ai-terminal .cmd { color: var(--accent); }
+    .ai-terminal .arg { color: #79c0ff; }
+    .ai-terminal .tree { color: #484f58; }
+    .ai-terminal .label-name { color: var(--copilot); font-weight: 500; }
+    .ai-terminal .label-color { color: var(--text-muted); }
+    .ai-terminal .label-desc { color: #8b949e; }
+    .ai-terminal .success { color: #3fb950; }
+    .ai-terminal .dim { color: #484f58; }
+    .ai-terminal .input-text { color: var(--text); }
 
     /* ── Labels ── */
     .labels-section { background: var(--bg-secondary); }
@@ -316,10 +472,80 @@
       flex-shrink: 0;
     }
 
+    /* ── Convention Callout ── */
+    .convention-section {
+      background: var(--bg);
+    }
+
+    .convention-callout {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 48px 40px;
+      background: linear-gradient(135deg, var(--bg-secondary), rgba(1, 110, 234, 0.04));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      position: relative;
+    }
+
+    .convention-callout::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(1, 110, 234, 0.2), rgba(163, 113, 247, 0.2), rgba(1, 110, 234, 0.1));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+    }
+
+    .convention-callout h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .convention-callout .by-line {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .convention-callout .by-line a {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .convention-callout p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .convention-format {
+      display: inline-block;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--text);
+      margin: 16px 0 8px;
+    }
+
+    .convention-format .key { color: var(--accent); }
+    .convention-format .sep { color: var(--text-muted); }
+    .convention-format .val { color: var(--copilot); }
+
     /* ── Quick Start ── */
     .quickstart-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
     }
 
@@ -348,7 +574,7 @@
       padding: 20px;
       overflow-x: auto;
       font-family: var(--mono);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       line-height: 1.7;
     }
 
@@ -374,6 +600,7 @@
       justify-content: center;
       gap: 24px;
       margin-bottom: 16px;
+      flex-wrap: wrap;
     }
 
     footer .footer-links a {
@@ -422,6 +649,14 @@
     .footer-action-btn.sponsor:hover { border-color: #db61a2; background: rgba(219, 97, 162, 0.15); }
 
     /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .ai-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .quickstart-grid { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 640px) {
       .hero { padding: 120px 0 60px; }
       section { padding: 60px 0; }
@@ -430,7 +665,7 @@
       nav .nav-links a { font-size: 0.8rem; }
       .features-grid { grid-template-columns: 1fr; }
       .label-categories { grid-template-columns: 1fr; }
-      .quickstart-grid { grid-template-columns: 1fr; }
+      .convention-callout { padding: 32px 24px; }
     }
   </style>
 </head>
@@ -439,9 +674,10 @@
   <!-- Nav -->
   <nav>
     <div class="container">
-      <div class="logo">🏷️ <span>ghlt</span> <span class="version">v0.3.0</span></div>
+      <div class="logo">🏷️ <span>ghlt</span> <span class="version">v0.5.0</span></div>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
+        <li><a href="#ai">AI Generate</a></li>
         <li><a href="#labels">Labels</a></li>
         <li><a href="#quickstart">Quick Start</a></li>
         <li><a href="https://github.com/warengonzaga/github-labels-template" target="_blank">GitHub</a></li>
@@ -452,11 +688,12 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <div class="hero-badge">20 labels &middot; 5 categories &middot; 1 command</div>
+      <div class="hero-badge">23 labels &middot; 5 categories &middot; AI-powered</div>
       <h1>
         <span class="gradient">GitHub Labels</span><br>Template
       </h1>
-      <p>A curated set of GitHub labels for any project &mdash; apply them all with a single CLI command.</p>
+      <p>A curated set of GitHub labels for any project &mdash; apply them all with a single CLI command, or generate custom labels with AI.</p>
+      <p class="hero-sub">Following the <strong>Clean Labels</strong> convention by <a href="https://github.com/AnyType" target="_blank">wgtechlabs</a> &middot; Powered by <a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a></p>
       <div class="install-box">
         <span class="prompt">$</span>
         <code id="install-cmd">npx github-labels-template apply</code>
@@ -471,6 +708,10 @@
           <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M0 0v16h16V0H0zm13 13H8V5h5v8zM3 3h10v2H3V3z"/></svg>
           npm
         </a>
+        <a href="#ai" class="btn btn-copilot">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M2 12h2m16 0h2M12 22v-4M7 20h10"/><circle cx="9" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></svg>
+          AI Generate
+        </a>
       </div>
     </div>
   </section>
@@ -483,15 +724,25 @@
         <p>Everything you need to standardize labels across your projects</p>
       </div>
       <div class="features-grid">
+        <div class="feature-card featured">
+          <span class="icon">🤖</span>
+          <h3>AI Label Generator <span class="copilot-tag">Copilot</span></h3>
+          <p>Generate custom labels using GitHub Copilot SDK. Interactive pick, refine, and apply &mdash; all following the Clean Labels convention.</p>
+        </div>
         <div class="feature-card">
           <span class="icon">🏷️</span>
-          <h3>20 Curated Labels</h3>
+          <h3>23 Curated Labels</h3>
           <p>Organized across 5 categories &mdash; type, status, community, resolution, and area. Covers every workflow need.</p>
         </div>
         <div class="feature-card">
           <span class="icon">🚀</span>
           <h3>One Command Setup</h3>
-          <p>Run <code>ghlt apply</code> and all 20 labels are created on your repo. No config files, no setup.</p>
+          <p>Run <code>ghlt apply</code> and all labels are created. Filter by <code>--category</code> or <code>--label</code> for selective apply.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🔀</span>
+          <h3>Migrate Command</h3>
+          <p>Clean slate in one command. <code>ghlt migrate</code> wipes all existing labels and applies the full template.</p>
         </div>
         <div class="feature-card">
           <span class="icon">🔍</span>
@@ -504,11 +755,6 @@
           <p>Skips existing labels by default. Use <code>--force</code> to update them to match the template.</p>
         </div>
         <div class="feature-card">
-          <span class="icon">🧹</span>
-          <h3>Wipe Command</h3>
-          <p>Remove all existing labels with a single command. Confirmation prompt keeps you safe.</p>
-        </div>
-        <div class="feature-card">
           <span class="icon">✅</span>
           <h3>Pre-Flight Checks</h3>
           <p>Validates that <code>gh</code> CLI is installed and authenticated before doing anything.</p>
@@ -519,9 +765,84 @@
           <p>Color-coded status for every label &mdash; created, updated, skipped, or failed &mdash; with a summary report.</p>
         </div>
         <div class="feature-card">
+          <span class="icon">🧹</span>
+          <h3>Wipe Command</h3>
+          <p>Remove all existing labels with <code>ghlt wipe</code>. Confirmation prompt keeps you safe from accidents.</p>
+        </div>
+        <div class="feature-card">
           <span class="icon">🌐</span>
           <h3>Dual Runtime</h3>
           <p>Works with both <code>npx</code> and <code>bunx</code>. Install globally or run on-demand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI-Powered Generation -->
+  <section id="ai" class="ai-section">
+    <div class="container">
+      <div class="ai-layout">
+        <div class="ai-content">
+          <h2>AI-Powered Label Generator</h2>
+          <div class="ai-subtitle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 0 1 5 5v2a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z"/><path d="M2 12h2m16 0h2M12 22v-4M7 20h10"/><circle cx="9" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></svg>
+            Powered by GitHub Copilot SDK
+          </div>
+          <p>Create custom labels that perfectly follow the Clean Labels convention. Describe what you need, and AI generates suggestions with proper naming, colors, and descriptions.</p>
+          <ul class="ai-bullets">
+            <li>
+              <span class="bullet-icon">&#10003;</span>
+              Generate labels following the <strong style="color: var(--text);">Clean Labels</strong> convention format
+            </li>
+            <li>
+              <span class="bullet-icon">&#10003;</span>
+              Interactive pick, refine with feedback, or regenerate suggestions
+            </li>
+            <li>
+              <span class="bullet-icon">&#10003;</span>
+              Saves to <code style="color: var(--copilot);">labels-custom.json</code> for reuse across repos
+            </li>
+            <li>
+              <span class="bullet-icon">&#10003;</span>
+              Choose your preferred Copilot model with <code style="color: var(--copilot);">--model</code>
+            </li>
+            <li>
+              <span class="bullet-icon">&#10003;</span>
+              Optionally apply generated labels directly to your repo
+            </li>
+          </ul>
+          <a href="https://github.com/warengonzaga/github-labels-template#generate-labels-ai" class="btn btn-copilot" target="_blank">
+            Read the Docs &rarr;
+          </a>
+        </div>
+        <div class="ai-terminal">
+          <div class="ai-terminal-header">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+            <span>ghlt generate</span>
+          </div>
+          <pre><span class="prompt-line"><span class="cmd">$</span> <span class="arg">ghlt generate</span></span>
+
+<span class="tree">?</span> <span class="dim">Select a category:</span> <span class="input-text">community</span>
+<span class="tree">?</span> <span class="dim">Describe the label you need:</span>
+  <span class="input-text">Label for sponsored contributors</span>
+
+<span class="dim">  Generating suggestions...</span>
+
+<span class="tree">  1.</span> <span class="label-name">sponsor</span>         <span class="label-color">ff6b6b</span>
+     <span class="label-desc">[Community] Sponsored contributor or backer [issues]</span>
+
+<span class="tree">  2.</span> <span class="label-name">sponsored-dev</span>  <span class="label-color">9b59b6</span>
+     <span class="label-desc">[Community] Developer with active sponsorship [PRs]</span>
+
+<span class="tree">  3.</span> <span class="label-name">backer</span>         <span class="label-color">27ae60</span>
+     <span class="label-desc">[Community] Financial backer of the project [issues]</span>
+
+<span class="tree">?</span> <span class="dim">Pick a label:</span> <span class="input-text">sponsor</span>
+
+<span class="success">&#10003; Saved to labels-custom.json</span>
+<span class="success">&#10003; Applied to warengonzaga/my-project</span></pre>
         </div>
       </div>
     </div>
@@ -532,7 +853,7 @@
     <div class="container">
       <div class="section-header">
         <h2>The Label Set</h2>
-        <p>20 labels designed to cover every project workflow</p>
+        <p>23 labels designed to cover every project workflow</p>
       </div>
       <div class="label-categories">
 
@@ -563,6 +884,9 @@
           <div class="label-pills">
             <span class="label-pill" style="background: rgba(112,87,255,0.15); color: #bc8cff;"><span class="dot" style="background: #7057ff;"></span>good first issue</span>
             <span class="label-pill" style="background: rgba(14,138,22,0.15); color: #56d364;"><span class="dot" style="background: #0e8a16;"></span>help wanted</span>
+            <span class="label-pill" style="background: rgba(182,2,5,0.15); color: #f85149;"><span class="dot" style="background: #b60205;"></span>maintainer only</span>
+            <span class="label-pill" style="background: rgba(255,117,24,0.15); color: #ff9a56;"><span class="dot" style="background: #ff7518;"></span>hacktoberfest</span>
+            <span class="label-pill" style="background: rgba(22,160,133,0.15); color: #3dd9c4;"><span class="dot" style="background: #16a085;"></span>hacktoberfest-accepted</span>
           </div>
         </div>
 
@@ -590,6 +914,21 @@
     </div>
   </section>
 
+  <!-- Clean Labels Convention -->
+  <section class="convention-section">
+    <div class="container">
+      <div class="convention-callout">
+        <h2>Clean Labels</h2>
+        <div class="by-line">by <a href="https://github.com/AnyType" target="_blank">wgtechlabs</a></div>
+        <p>A standardized labeling convention for GitHub repositories. Every label follows a consistent format with name, color, and structured description &mdash; designed for clarity and consistency across any project.</p>
+        <div class="convention-format">
+          <span class="key">name</span> <span class="sep">&middot;</span> <span class="key">color</span> <span class="sep">&middot;</span> <span class="val">[Category]</span> <span class="sep">Description</span> <span class="val">[scope]</span>
+        </div>
+        <p style="font-size: 0.85rem; margin-top: 12px;">Where scope is <code style="color: var(--copilot);">[issues]</code>, <code style="color: var(--copilot);">[PRs]</code>, or <code style="color: var(--copilot);">[issues, PRs]</code></p>
+      </div>
+    </div>
+  </section>
+
   <!-- Quick Start -->
   <section id="quickstart">
     <div class="container">
@@ -606,14 +945,17 @@
             <span class="dot-green"></span>
             <span>Apply labels</span>
           </div>
-          <pre><span class="comment"># Apply to current repo</span>
+          <pre><span class="comment"># Apply all labels to current repo</span>
 <span class="cmd">ghlt</span> <span class="arg">apply</span>
 
-<span class="comment"># Apply to a specific repo</span>
-<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--repo</span> owner/repo
+<span class="comment"># Apply by category</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--category</span> type
 
-<span class="comment"># Overwrite existing labels</span>
-<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--force</span></pre>
+<span class="comment"># Apply specific labels</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--label</span> "bug,enhancement"
+
+<span class="comment"># Include AI-generated labels</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--custom</span></pre>
         </div>
 
         <div class="code-card">
@@ -621,16 +963,33 @@
             <span class="dot-red"></span>
             <span class="dot-yellow"></span>
             <span class="dot-green"></span>
-            <span>Wipe labels</span>
+            <span>Generate with AI</span>
           </div>
-          <pre><span class="comment"># Remove all labels (with prompt)</span>
-<span class="cmd">ghlt</span> <span class="arg">wipe</span>
+          <pre><span class="comment"># Interactive AI generator</span>
+<span class="cmd">ghlt</span> <span class="arg">generate</span>
+
+<span class="comment"># Pre-select a category</span>
+<span class="cmd">ghlt</span> <span class="arg">generate</span> <span class="flag">--category</span> type
+
+<span class="comment"># Use a specific model</span>
+<span class="cmd">ghlt</span> <span class="arg">generate</span> <span class="flag">--model</span> claude-sonnet-4</pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-card-header">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+            <span>Migrate</span>
+          </div>
+          <pre><span class="comment"># Clean slate: wipe + apply</span>
+<span class="cmd">ghlt</span> <span class="arg">migrate</span>
 
 <span class="comment"># Skip confirmation</span>
-<span class="cmd">ghlt</span> <span class="arg">wipe</span> <span class="flag">--yes</span>
+<span class="cmd">ghlt</span> <span class="arg">migrate</span> <span class="flag">--yes</span>
 
-<span class="comment"># Clean slate workflow</span>
-<span class="cmd">ghlt</span> <span class="arg">wipe</span> <span class="flag">--yes</span> && <span class="cmd">ghlt</span> <span class="arg">apply</span></pre>
+<span class="comment"># Include custom labels</span>
+<span class="cmd">ghlt</span> <span class="arg">migrate</span> <span class="flag">--custom</span></pre>
         </div>
 
         <div class="code-card">
@@ -673,7 +1032,7 @@
           Sponsor
         </a>
       </div>
-      <p>Built by <a href="https://github.com/warengonzaga">Waren Gonzaga</a></p>
+      <p>Built by <a href="https://github.com/warengonzaga">Waren Gonzaga</a> &middot; <strong>Clean Labels</strong> by <a href="https://github.com/AnyType">wgtechlabs</a></p>
     </div>
   </footer>
 
