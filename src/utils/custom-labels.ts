@@ -57,5 +57,13 @@ export function saveCustomLabel(category: string, label: Label): void {
     data[category][index] = label;
   }
 
-  writeFileSync(filePath, JSON.stringify(data, null, 2) + "\n", "utf-8");
+  try {
+    writeFileSync(filePath, JSON.stringify(data, null, 2) + "\n", "utf-8");
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Failed to save custom labels to "${filePath}": ${message}`
+    );
+  }
 }
