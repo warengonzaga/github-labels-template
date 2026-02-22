@@ -7,6 +7,7 @@ import {
   deleteLabel,
 } from "../utils/gh";
 import { success, error, info, heading, summary } from "../utils/logger";
+import { confirmPrompt } from "../utils/confirm";
 import pc from "picocolors";
 
 export default defineCommand({
@@ -60,24 +61,10 @@ export default defineCommand({
 
     // Confirmation
     if (!args.yes) {
-      console.log(
-        `\n${pc.bold(pc.red(`This will delete all ${existing.length} labels from ${repo}.`))}`
+      const confirmed = await confirmPrompt(
+        pc.bold(pc.red(`This will delete all ${existing.length} labels from ${repo}.`))
       );
-      process.stdout.write(`${pc.dim("Continue? [y/N] ")}`);
-
-      const response = await new Promise<string>((resolve) => {
-        process.stdin.setEncoding("utf-8");
-        process.stdin.once("data", (data) => {
-          process.stdin.pause();
-          resolve(data.toString().trim());
-        });
-        process.stdin.resume();
-      });
-
-      if (response.toLowerCase() !== "y") {
-        info("Aborted.");
-        return;
-      }
+      if (!confirmed) return;
     }
 
     heading("Deleting Labels");
