@@ -10,7 +10,7 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 
 ## Features
 
-- 🏷️ **21 Curated Labels**: Organized across 5 categories — type, status, community, resolution, and area
+- 🏷️ **23 Curated Labels**: Organized across 5 categories — type, status, community, resolution, and area
 - 🚀 **One Command Setup**: Apply all labels to any repo with `ghlt apply`
 - 🔍 **Auto-Detect Repo**: Automatically detects the current repository from git remote
 - 🔄 **Smart Conflict Handling**: Skips existing labels by default, `--force` to update
@@ -31,7 +31,7 @@ npx github-labels-template apply
 bunx github-labels-template apply
 ```
 
-That's it. All 21 labels are applied to the current repo.
+That's it. All 23 labels are applied to the current repo.
 
 ## Installation
 
@@ -192,6 +192,8 @@ Signals for open source contributors.
 | `good first issue` | ![#7057ff](https://placehold.co/12x12/7057ff/7057ff.png) `7057ff` | Good for newcomers — well-scoped and documented |
 | `help wanted` | ![#0e8a16](https://placehold.co/12x12/0e8a16/0e8a16.png) `0e8a16` | Open for community contribution |
 | `maintainer only` | ![#b60205](https://placehold.co/12x12/b60205/b60205.png) `b60205` | Reserved for maintainers — not open for external contribution |
+| `hacktoberfest` | ![#ff7518](https://placehold.co/12x12/ff7518/ff7518.png) `ff7518` | Participating in Hacktoberfest — open source celebration |
+| `hacktoberfest-accepted` | ![#16a085](https://placehold.co/12x12/16a085/16a085.png) `16a085` | PR accepted for Hacktoberfest contribution |
 
 ### Resolution Labels
 

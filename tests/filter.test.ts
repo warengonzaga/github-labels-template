@@ -12,7 +12,7 @@ describe("filterLabels", () => {
       (sum, [, items]) => sum + items.length,
       0
     );
-    expect(totalLabels).toBe(21);
+    expect(totalLabels).toBe(23);
     expect(result.entries.length).toBe(5);
     expect(result.warnings.length).toBe(0);
   });
@@ -123,6 +123,8 @@ describe("filterLabels", () => {
     expect(names).toContain("good first issue");
     expect(names).toContain("help wanted");
     expect(names).toContain("maintainer only");
-    expect(names.length).toBe(3);
+    expect(names).toContain("hacktoberfest");
+    expect(names).toContain("hacktoberfest-accepted");
+    expect(names.length).toBe(5);
   });
 });
