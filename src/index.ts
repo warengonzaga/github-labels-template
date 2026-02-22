@@ -2,7 +2,6 @@
 import { defineCommand, runMain } from "citty";
 import apply from "./commands/apply";
 import wipe from "./commands/wipe";
-import preview from "./commands/preview";
 import generate from "./commands/generate";
 import migrate from "./commands/migrate";
 import { showBanner, getVersion } from "./ui/banner";
@@ -27,7 +26,6 @@ const main = defineCommand({
     apply,
     wipe,
     migrate,
-    preview,
     generate,
   },
   run({ args }) {
