@@ -15,7 +15,8 @@
   ],
   "community": [
     { "name": "good first issue", "color": "7057ff", "description": "[Community] Good for newcomers — well-scoped and documented [issues]" },
-    { "name": "help wanted", "color": "0e8a16", "description": "[Community] Open for community contribution [issues]" }
+    { "name": "help wanted", "color": "0e8a16", "description": "[Community] Open for community contribution [issues]" },
+    { "name": "maintainer only", "color": "b60205", "description": "[Community] Reserved for maintainers — not open for external contribution [issues, PRs]" }
   ],
   "resolution": [
     { "name": "duplicate", "color": "cfd3d7", "description": "[Resolution] This issue or pull request already exists [issues, PRs]" },

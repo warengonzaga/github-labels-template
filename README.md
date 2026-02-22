@@ -10,7 +10,7 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 
 ## Features
 
-- 🏷️ **20 Curated Labels**: Organized across 5 categories — type, status, community, resolution, and area
+- 🏷️ **21 Curated Labels**: Organized across 5 categories — type, status, community, resolution, and area
 - 🚀 **One Command Setup**: Apply all labels to any repo with `ghlt apply`
 - 🔍 **Auto-Detect Repo**: Automatically detects the current repository from git remote
 - 🔄 **Smart Conflict Handling**: Skips existing labels by default, `--force` to update
@@ -30,7 +30,7 @@ npx github-labels-template apply
 bunx github-labels-template apply
 ```
 
-That's it. All 20 labels are applied to the current repo.
+That's it. All 21 labels are applied to the current repo.
 
 ## Installation
 
@@ -62,6 +62,24 @@ ghlt apply --repo owner/repo
 
 # Overwrite existing labels with template values
 ghlt apply --force
+
+# Apply only a specific label
+ghlt apply --label bug
+
+# Apply specific labels (comma-separated)
+ghlt apply --label "bug,enhancement"
+
+# Apply all labels from a category
+ghlt apply --category type
+
+# Apply labels from multiple categories
+ghlt apply --category "type,status"
+
+# Combine: apply all community labels + the "bug" label
+ghlt apply --category community --label bug
+
+# Combine with force and repo
+ghlt apply --category type --force --repo owner/repo
 ```
 
 ### Wipe Labels
@@ -121,6 +139,7 @@ Signals for open source contributors.
 |------|-------|-------------|
 | `good first issue` | ![#7057ff](https://placehold.co/12x12/7057ff/7057ff.png) `7057ff` | Good for newcomers — well-scoped and documented |
 | `help wanted` | ![#0e8a16](https://placehold.co/12x12/0e8a16/0e8a16.png) `0e8a16` | Open for community contribution |
+| `maintainer only` | ![#b60205](https://placehold.co/12x12/b60205/b60205.png) `b60205` | Reserved for maintainers — not open for external contribution |
 
 ### Resolution Labels
 
@@ -162,6 +181,8 @@ COMMANDS
 OPTIONS (apply)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
   -f, --force                Overwrite existing labels
+  -l, --label <name>         Apply specific label(s) by name (comma-separated)
+  -c, --category <name>      Apply labels from specific category(ies) (comma-separated)
 
 OPTIONS (wipe)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
