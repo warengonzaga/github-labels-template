@@ -10,6 +10,12 @@ const CATEGORY_NAMES: Record<string, string> = {
   area: "Area",
 };
 
+/**
+ * Build the system prompt for the Copilot session.
+ * @param category - The label category (e.g., "type", "status")
+ * @param count - Number of label suggestions to generate
+ * @returns The formatted system prompt string
+ */
 function buildSystemPrompt(
   category: string,
   count: number
@@ -39,6 +45,12 @@ function buildSystemPrompt(
   ].join("\n");
 }
 
+/**
+ * Build the user prompt for Copilot label generation.
+ * @param description - The label description or use case
+ * @param refinement - Optional refinement feedback for iterative improvements
+ * @returns The formatted user prompt string
+ */
 function buildUserPrompt(
   description: string,
   refinement?: string
@@ -86,8 +98,8 @@ export function parseLabelsResponse(text: string): Label[] {
     }
 
     // Normalize color — strip # if included
-    const color = obj.color.replace(/^#/, "");
-    if (!/^[0-9a-fA-F]{6}$/.test(color)) {
+    const normalizedColor = obj.color.replace(/^#/, "");
+    if (!/^[0-9a-fA-F]{6}$/.test(normalizedColor)) {
       throw new Error(
         `Label "${obj.name}" has invalid color "${obj.color}" — must be 6-char hex`
       );
@@ -95,7 +107,7 @@ export function parseLabelsResponse(text: string): Label[] {
 
     return {
       name: obj.name,
-      color: color.toLowerCase(),
+      color: normalizedColor.toLowerCase(),
       description: obj.description,
     };
   });
