@@ -18,6 +18,7 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 - ✅ **Pre-Flight Checks**: Validates `gh` CLI is installed and authenticated before doing anything
 - 📊 **Clear Output**: Structured logging powered by [@wgtechlabs/log-engine](https://github.com/wgtechlabs/log-engine) with color-coded levels and emoji
 - 🎨 **ASCII Banner**: Beautiful ANSI Shadow figlet banner with version and author info
+- 🤖 **AI Label Generator**: Generate custom labels using GitHub Copilot — interactive pick, refine, and apply
 - 🌐 **Dual Runtime**: Works with both `npx` and `bunx`
 
 ## Quick Start
@@ -48,6 +49,7 @@ ghlt apply
 ## Prerequisites
 
 - [GitHub CLI](https://cli.github.com) (`gh`) installed and authenticated
+- [GitHub Copilot](https://github.com/features/copilot) subscription (required for `generate` command only)
 
 ## Usage
 
@@ -80,7 +82,35 @@ ghlt apply --category community --label bug
 
 # Combine with force and repo
 ghlt apply --category type --force --repo owner/repo
+
+# Include custom labels from labels-custom.json
+ghlt apply --custom
+
+# Apply only custom labels from a specific category
+ghlt apply --custom --category type
 ```
+
+### Generate Labels (AI)
+
+Generate custom labels using GitHub Copilot. Requires a [GitHub Copilot](https://github.com/features/copilot) subscription.
+
+```bash
+# Interactive label generator
+ghlt generate
+
+# Pre-select a category
+ghlt generate --category type
+
+# Generate and apply to a specific repo
+ghlt generate --repo owner/repo
+```
+
+The generator will:
+1. Ask you to pick a category (type, status, community, resolution, area)
+2. Ask you to describe the label you need
+3. Generate 3 AI-powered suggestions following the template conventions
+4. Let you pick one, refine with feedback, or regenerate
+5. Save to `labels-custom.json` and optionally apply to a repo
 
 ### Wipe Labels
 
@@ -169,20 +199,26 @@ Broad software layers — universal across any project.
 ghlt — GitHub Labels Template CLI
 
 USAGE
-  ghlt [OPTIONS] apply|wipe
+  ghlt [OPTIONS] apply|wipe|generate
 
 OPTIONS
   -v, --version              Show version number
 
 COMMANDS
-  apply    Apply labels from the template to a repository
-  wipe     Remove all existing labels from a repository
+  apply      Apply labels from the template to a repository
+  wipe       Remove all existing labels from a repository
+  generate   Generate custom labels using AI (requires GitHub Copilot)
 
 OPTIONS (apply)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
   -f, --force                Overwrite existing labels
   -l, --label <name>         Apply specific label(s) by name (comma-separated)
   -c, --category <name>      Apply labels from specific category(ies) (comma-separated)
+      --custom               Include custom labels from labels-custom.json
+
+OPTIONS (generate)
+  -r, --repo <owner/repo>   Target repository for optional apply step
+  -c, --category <name>      Pre-select a category (type, status, community, resolution, area)
 
 OPTIONS (wipe)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)

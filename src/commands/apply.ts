@@ -9,6 +9,7 @@ import {
 } from "../utils/gh";
 import { success, error, warn, info, heading, summary } from "../utils/logger";
 import { filterLabels } from "../utils/filter";
+import { loadCustomLabels } from "../utils/custom-labels";
 import labels from "../labels.json";
 import type { Label } from "../utils/gh";
 
@@ -41,6 +42,12 @@ export default defineCommand({
       description:
         'Apply labels from specific category(ies). Comma-separated for multiple (e.g., --category "type,status")',
     },
+    custom: {
+      type: "boolean",
+      default: false,
+      description:
+        "Include custom labels from labels-custom.json (generated via ghlt generate)",
+    },
   },
   async run({ args }) {
     // Pre-flight checks
@@ -69,8 +76,42 @@ export default defineCommand({
     const existing = await listLabels(repo);
     const existingSet = new Set(existing.map((n) => n.toLowerCase()));
 
+    // Merge custom labels if --custom flag is set
+    const labelPool: Record<string, Label[]> = {
+      ...(labels as Record<string, Label[]>),
+    };
+
+    if (args.custom) {
+      const custom = loadCustomLabels();
+      const customCount = Object.values(custom).reduce(
+        (sum, arr) => sum + arr.length,
+        0
+      );
+
+      if (customCount > 0) {
+        info(`Including ${customCount} custom label(s) from labels-custom.json`);
+        for (const [cat, catLabels] of Object.entries(custom)) {
+          if (!labelPool[cat]) {
+            labelPool[cat] = [];
+          }
+          for (const label of catLabels) {
+            const exists = labelPool[cat].some(
+              (l) => l.name.toLowerCase() === label.name.toLowerCase()
+            );
+            if (!exists) {
+              labelPool[cat].push(label);
+            }
+          }
+        }
+      } else {
+        warn(
+          "No custom labels found. Use `ghlt generate` to create custom labels."
+        );
+      }
+    }
+
     // Filter labels by --label and --category flags
-    const { entries: filteredEntries, warnings } = filterLabels(labels, {
+    const { entries: filteredEntries, warnings } = filterLabels(labelPool, {
       label: args.label,
       category: args.category,
     });

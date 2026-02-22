@@ -3,6 +3,7 @@ import { defineCommand, runMain } from "citty";
 import apply from "./commands/apply";
 import wipe from "./commands/wipe";
 import preview from "./commands/preview";
+import generate from "./commands/generate";
 import { showBanner, getVersion } from "./ui/banner";
 
 const isHelp = process.argv.includes("--help") || process.argv.includes("-h");
@@ -25,6 +26,7 @@ const main = defineCommand({
     apply,
     wipe,
     preview,
+    generate,
   },
   run({ args }) {
     if (args.version) {
