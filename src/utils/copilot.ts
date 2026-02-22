@@ -109,18 +109,26 @@ export async function generateLabels(options: {
   description: string;
   count?: number;
   refinement?: string;
+  model?: string;
 }): Promise<Label[]> {
-  const { category, description, count = 3, refinement } = options;
+  const { category, description, count = 3, refinement, model } = options;
 
   const client = new CopilotClient();
   await client.start();
 
   try {
-    const session = await client.createSession({
+    const sessionConfig: Record<string, unknown> = {
       systemMessage: {
         content: buildSystemPrompt(category, count),
       },
-    });
+    };
+
+    // Only set model if explicitly provided — otherwise use user's Copilot default
+    if (model) {
+      sessionConfig.model = model;
+    }
+
+    const session = await client.createSession(sessionConfig);
 
     try {
       const userPrompt = buildUserPrompt(description, refinement);
@@ -143,17 +151,52 @@ export async function generateLabels(options: {
 
 /**
  * Check if GitHub Copilot is available and authenticated.
+ * Returns a specific error message if something goes wrong, or null if OK.
  */
-export async function checkCopilotAvailable(): Promise<boolean> {
+export async function checkCopilotAvailable(): Promise<string | null> {
+  let client: InstanceType<typeof CopilotClient> | null = null;
+
   try {
-    const client = new CopilotClient();
+    client = new CopilotClient();
     await client.start();
-    await client.ping();
-    await client.stop();
-    return true;
-  } catch {
-    return false;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+
+    if (msg.includes("ENOENT") || msg.includes("not found")) {
+      return "Copilot CLI binary not found. Ensure GitHub Copilot is installed and your gh CLI is up to date.";
+    }
+
+    return `Failed to start Copilot service: ${msg}`;
   }
+
+  try {
+    await client.ping();
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+
+    if (
+      msg.includes("auth") ||
+      msg.includes("token") ||
+      msg.includes("401") ||
+      msg.includes("403")
+    ) {
+      return "Copilot authentication failed. Ensure your GitHub account has an active Copilot subscription and run `gh auth login` to refresh your token.";
+    }
+
+    if (msg.includes("ECONNREFUSED") || msg.includes("timeout") || msg.includes("network")) {
+      return "Could not reach GitHub Copilot service. Check your internet connection and try again.";
+    }
+
+    return `Copilot health check failed: ${msg}`;
+  } finally {
+    try {
+      await client.stop();
+    } catch {
+      // Ignore cleanup errors
+    }
+  }
+
+  return null; // All good
 }
 
 // Exported for testing
