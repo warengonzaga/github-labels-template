@@ -103,6 +103,10 @@ ghlt generate --category type
 
 # Generate and apply to a specific repo
 ghlt generate --repo owner/repo
+
+# Use a specific Copilot model (advanced)
+ghlt generate --model gpt-4.1
+ghlt generate --model claude-sonnet-4
 ```
 
 The generator will:
@@ -219,6 +223,7 @@ OPTIONS (apply)
 OPTIONS (generate)
   -r, --repo <owner/repo>   Target repository for optional apply step
   -c, --category <name>      Pre-select a category (type, status, community, resolution, area)
+  -m, --model <model>        Copilot model to use (default: your Copilot config)
 
 OPTIONS (wipe)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)

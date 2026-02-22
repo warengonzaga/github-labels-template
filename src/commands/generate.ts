@@ -45,6 +45,12 @@ export default defineCommand({
       description:
         "Pre-select a category (type, status, community, resolution, area)",
     },
+    model: {
+      type: "string",
+      alias: "m",
+      description:
+        "Copilot model to use (e.g., gpt-4.1, claude-sonnet-4). Defaults to your Copilot config.",
+    },
   },
   async run({ args }) {
     // Pre-flight checks
@@ -59,10 +65,9 @@ export default defineCommand({
     }
 
     info("Checking GitHub Copilot availability...");
-    if (!(await checkCopilotAvailable())) {
-      error(
-        "GitHub Copilot is not available. Ensure you have a Copilot subscription and gh CLI is authenticated."
-      );
+    const copilotError = await checkCopilotAvailable();
+    if (copilotError) {
+      error(copilotError);
       process.exit(1);
     }
     success("GitHub Copilot is ready.");
@@ -91,6 +96,10 @@ export default defineCommand({
 
     heading(`Generating ${category} label`);
 
+    if (args.model) {
+      info(`Using model: ${args.model}`);
+    }
+
     // Step 2: Description input
     const description = await input({
       message: "Describe the label you need:",
@@ -116,6 +125,7 @@ export default defineCommand({
           description,
           count: 3,
           refinement,
+          model: args.model,
         });
       } catch (err) {
         error(
