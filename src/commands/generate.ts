@@ -139,6 +139,7 @@ export default defineCommand({
         });
         if (retry) {
           refinement = undefined;
+          attempt = 1;
           continue;
         }
         return;
