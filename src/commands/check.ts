@@ -5,7 +5,7 @@ import {
   detectRepo,
   listLabelsDetailed,
 } from "../utils/gh";
-import { error, info, heading, summary } from "../utils/logger";
+import { error, info } from "../utils/logger";
 import { filterLabels } from "../utils/filter";
 import labels from "../labels.json";
 import type { Label } from "../utils/gh";
@@ -27,7 +27,7 @@ function statusIcon(status: CheckStatus): string {
   return pc.yellow("~");
 }
 
-function statusLabel(status: CheckStatus, strict: boolean): string {
+function statusLabel(status: CheckStatus): string {
   switch (status) {
     case "match":
       return pc.dim("match");
@@ -167,7 +167,7 @@ export default defineCommand({
         const icon = statusIcon(result.status);
         const name = result.template.name.padEnd(28);
         const color = pc.dim(`#${result.template.color}`);
-        const lbl = statusLabel(result.status, strict);
+        const lbl = statusLabel(result.status);
 
         let line = `  ${icon} ${name} ${color}  ${lbl}`;
 
@@ -193,14 +193,6 @@ export default defineCommand({
     const total = results.length;
     const failing = results.filter((r) => isFailing(r.status, strict)).length;
 
-    // Summary
-    const summaryObj: Parameters<typeof summary>[0] = {};
-    if (matched > 0) summaryObj.created = matched;   // reuse "created" slot for "matched"
-    if (mismatched > 0) summaryObj.skipped = mismatched;
-    if (missing > 0) summaryObj.failed = missing;
-
-    // Custom summary line instead of the generic one
-    const matchedStr = pc.green(`${matched} matched`);
     const mismatchedStr = mismatched > 0 ? pc.yellow(`, ${mismatched} mismatched`) : "";
     const missingStr = missing > 0 ? pc.red(`, ${missing} missing`) : "";
     const scoreStr = pc.bold(`${matched}/${total}`);
@@ -208,8 +200,12 @@ export default defineCommand({
     console.log(`${pc.bold("Result:")} ${scoreStr} labels matched${mismatchedStr}${missingStr}`);
 
     if (failing === 0) {
+      const mismatchHint =
+        !strict && mismatched > 0
+          ? pc.dim(`  (${mismatched} mismatch${mismatched !== 1 ? "es" : ""} — use --strict to enforce)`)
+          : "";
       console.log(
-        `${pc.bold("Compatible:")} ${pc.green("✔ Yes")}${strict ? " (strict)" : ""}`
+        `${pc.bold("Compatible:")} ${pc.green("✔ Yes")}${strict ? " (strict)" : ""}${mismatchHint}`
       );
     } else {
       console.log(
