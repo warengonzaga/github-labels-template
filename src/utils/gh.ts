@@ -53,6 +53,27 @@ export async function detectRepo(): Promise<string | null> {
   }
 }
 
+export async function listLabelsDetailed(repo: string): Promise<Label[]> {
+  const { exitCode, stdout } = await run([
+    "label",
+    "list",
+    "--repo",
+    repo,
+    "--json",
+    "name,color,description",
+    "--limit",
+    "100",
+  ]);
+  if (exitCode !== 0) return [];
+  const text = stdout.trim();
+  if (!text) return [];
+  try {
+    return JSON.parse(text) as Label[];
+  } catch {
+    return [];
+  }
+}
+
 export async function listLabels(repo: string): Promise<string[]> {
   const { exitCode, stdout } = await run([
     "label",

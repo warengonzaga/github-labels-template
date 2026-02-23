@@ -4,6 +4,7 @@ import apply from "./commands/apply";
 import wipe from "./commands/wipe";
 import generate from "./commands/generate";
 import migrate from "./commands/migrate";
+import list from "./commands/list";
 import { showBanner, getVersion } from "./ui/banner";
 
 const isHelp = process.argv.includes("--help") || process.argv.includes("-h");
@@ -27,6 +28,7 @@ const main = defineCommand({
     wipe,
     migrate,
     generate,
+    list,
   },
   run({ args }) {
     if (args.version) {

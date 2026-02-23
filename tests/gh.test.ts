@@ -8,6 +8,7 @@ describe("GH Utils", () => {
     expect(typeof gh.checkGhAuth).toBe("function");
     expect(typeof gh.detectRepo).toBe("function");
     expect(typeof gh.listLabels).toBe("function");
+    expect(typeof gh.listLabelsDetailed).toBe("function");
     expect(typeof gh.createLabel).toBe("function");
     expect(typeof gh.editLabel).toBe("function");
     expect(typeof gh.deleteLabel).toBe("function");
@@ -36,6 +37,15 @@ describe("GH Utils", () => {
     it("should return an array for an invalid repo", async () => {
       const { listLabels } = await import("../src/utils/gh");
       const result = await listLabels("invalid/nonexistent-repo-xyz");
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(0);
+    });
+  });
+
+  describe("listLabelsDetailed", () => {
+    it("should return an empty array for an invalid repo", async () => {
+      const { listLabelsDetailed } = await import("../src/utils/gh");
+      const result = await listLabelsDetailed("invalid/nonexistent-repo-xyz");
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
