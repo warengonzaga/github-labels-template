@@ -126,6 +126,22 @@ Hope this helps!`;
       expect(prompt).toContain("exactly 5");
     });
 
+    it("should include relevance instruction", () => {
+      const prompt = buildSystemPrompt("type", 3);
+      expect(prompt).toContain("DIRECTLY match what the user is asking for");
+    });
+
+    it("should include variation hint for attempt > 1", () => {
+      const prompt = buildSystemPrompt("type", 3, 2);
+      expect(prompt).toContain("attempt #2");
+      expect(prompt).toContain("completely different");
+    });
+
+    it("should not include variation hint for attempt 1", () => {
+      const prompt = buildSystemPrompt("type", 3, 1);
+      expect(prompt).not.toContain("attempt #");
+    });
+
     it("should handle unknown categories gracefully", () => {
       const prompt = buildSystemPrompt("nonexistent", 3);
       // Should include the unknown category name
@@ -156,6 +172,23 @@ Hope this helps!`;
     it("should not include refinement when not provided", () => {
       const prompt = buildUserPrompt("test description");
       expect(prompt).not.toContain("Refinement");
+    });
+
+    it("should include variation hint for attempt > 1", () => {
+      const prompt = buildUserPrompt("test description", undefined, 3);
+      expect(prompt).toContain("attempt #3");
+      expect(prompt).toContain("different suggestions");
+    });
+
+    it("should not include variation hint for attempt 1", () => {
+      const prompt = buildUserPrompt("test description", undefined, 1);
+      expect(prompt).not.toContain("attempt #");
+    });
+
+    it("should include both refinement and attempt hint", () => {
+      const prompt = buildUserPrompt("test", "change color", 2);
+      expect(prompt).toContain("Refinement feedback: change color");
+      expect(prompt).toContain("attempt #2");
     });
   });
 });
