@@ -127,4 +127,70 @@ describe("filterLabels", () => {
     expect(names).toContain("hacktoberfest-accepted");
     expect(names.length).toBe(5);
   });
+
+  it("should exclude a specific label from all results", () => {
+    const result = filterLabels(labels, { excludeLabel: "bug" });
+    const allNames = result.entries.flatMap(([, items]) =>
+      items.map((l) => l.name)
+    );
+    expect(allNames).not.toContain("bug");
+    expect(allNames.length).toBe(22); // 23 total - 1 excluded
+  });
+
+  it("should exclude multiple labels", () => {
+    const result = filterLabels(labels, { excludeLabel: "bug,enhancement" });
+    const allNames = result.entries.flatMap(([, items]) =>
+      items.map((l) => l.name)
+    );
+    expect(allNames).not.toContain("bug");
+    expect(allNames).not.toContain("enhancement");
+    expect(allNames.length).toBe(21); // 23 total - 2 excluded
+  });
+
+  it("should exclude an entire category", () => {
+    const result = filterLabels(labels, { excludeCategory: "type" });
+    const categories = result.entries.map(([cat]) => cat);
+    expect(categories).not.toContain("type");
+    const allNames = result.entries.flatMap(([, items]) =>
+      items.map((l) => l.name)
+    );
+    expect(allNames.length).toBe(17); // 23 total - 6 type labels
+  });
+
+  it("should exclude multiple categories", () => {
+    const result = filterLabels(labels, { excludeCategory: "type,status" });
+    const categories = result.entries.map(([cat]) => cat);
+    expect(categories).not.toContain("type");
+    expect(categories).not.toContain("status");
+    const allNames = result.entries.flatMap(([, items]) =>
+      items.map((l) => l.name)
+    );
+    expect(allNames.length).toBe(13); // 23 total - 6 type - 4 status
+  });
+
+  it("should combine inclusion and exclusion filters", () => {
+    // All type labels except "bug"
+    const result = filterLabels(labels, {
+      category: "type",
+      excludeLabel: "bug",
+    });
+    const allNames = result.entries.flatMap(([, items]) =>
+      items.map((l) => l.name)
+    );
+    expect(allNames).not.toContain("bug");
+    expect(allNames).toContain("enhancement");
+    expect(allNames.length).toBe(5); // 6 type - 1 excluded
+  });
+
+  it("should warn on unknown exclude category", () => {
+    const result = filterLabels(labels, { excludeCategory: "nonexistent" });
+    expect(result.warnings.length).toBe(1);
+    expect(result.warnings[0]).toContain('Unknown exclude category "nonexistent"');
+  });
+
+  it("should warn on unknown exclude label", () => {
+    const result = filterLabels(labels, { excludeLabel: "nonexistent-label" });
+    expect(result.warnings.length).toBe(1);
+    expect(result.warnings[0]).toContain('Exclude label "nonexistent-label" not found');
+  });
 });

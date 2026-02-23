@@ -48,6 +48,17 @@ export default defineCommand({
       description:
         "Include custom labels from labels-custom.json (generated via ghlt generate)",
     },
+    exclude: {
+      type: "string",
+      alias: "e",
+      description:
+        'Exclude specific label(s) by name. Comma-separated for multiple (e.g., --exclude "bug,enhancement")',
+    },
+    "exclude-category": {
+      type: "string",
+      description:
+        'Exclude labels from specific category(ies). Comma-separated for multiple (e.g., --exclude-category "type,status")',
+    },
   },
   async run({ args }) {
     // Pre-flight checks
@@ -114,6 +125,8 @@ export default defineCommand({
     const { entries: filteredEntries, warnings } = filterLabels(labelPool, {
       label: args.label,
       category: args.category,
+      excludeLabel: args.exclude,
+      excludeCategory: args["exclude-category"],
     });
 
     for (const w of warnings) {
@@ -125,6 +138,12 @@ export default defineCommand({
     }
     if (args.label) {
       info(`Applying specific labels: ${args.label}`);
+    }
+    if (args["exclude-category"]) {
+      info(`Excluding categories: ${args["exclude-category"]}`);
+    }
+    if (args.exclude) {
+      info(`Excluding labels: ${args.exclude}`);
     }
 
     if (filteredEntries.length === 0) {
