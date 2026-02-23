@@ -110,6 +110,7 @@ export default defineCommand({
     // Step 3: Generation + selection loop
     let selectedLabel: Label | null = null;
     let refinement: string | undefined;
+    let attempt = 1;
 
     while (!selectedLabel) {
       info(
@@ -126,6 +127,7 @@ export default defineCommand({
           count: 3,
           refinement,
           model: args.model,
+          attempt,
         });
       } catch (err) {
         error(
@@ -183,11 +185,13 @@ export default defineCommand({
           validate: (value) =>
             value.trim().length > 0 || "Please provide feedback.",
         });
+        attempt++;
         continue;
       }
 
       if (choice === "regenerate") {
         refinement = undefined;
+        attempt++;
         continue;
       }
 
