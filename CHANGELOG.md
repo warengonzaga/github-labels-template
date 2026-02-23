@@ -15,6 +15,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [0.8.0] - 2026-02-23
+
+### Added
+
+- add check command to validate repository label templates
+
+### Changed
+
+- refine variation hint in label generation prompt
+- reset attempt counter on retry in label generation
+- simplify statusLabel function and remove unused summary
+- enhance label generation prompts with attempt tracking
+- add attempt tracking for label generation process
+
 ## [0.7.0] - 2026-02-23
 
 ### Added
