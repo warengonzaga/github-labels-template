@@ -14,11 +14,13 @@ const CATEGORY_NAMES: Record<string, string> = {
  * Build the system prompt for the Copilot session.
  * @param category - The label category (e.g., "type", "status")
  * @param count - Number of label suggestions to generate
+ * @param attempt - Attempt number for variation (1-based, defaults to 1)
  * @returns The formatted system prompt string
  */
 function buildSystemPrompt(
   category: string,
-  count: number
+  count: number,
+  attempt: number = 1
 ): string {
   const categoryTitle = CATEGORY_NAMES[category] ?? category;
   const existingLabels = (labels as Record<string, Label[]>)[category] ?? [];
@@ -26,16 +28,23 @@ function buildSystemPrompt(
     .map((l) => `  - "${l.name}" (${l.color}) — ${l.description}`)
     .join("\n");
 
+  const variationHint =
+    attempt > 1
+      ? `\nIMPORTANT: This is attempt #${attempt}. You MUST generate completely different label names, colors, and descriptions than any previous suggestions. Be creative and explore new angles.\n`
+      : "";
+
   return [
-    `You are a GitHub label generator. Generate exactly ${count} label suggestions for the "${categoryTitle}" category.`,
+    `You are a GitHub label generator. The user will describe the kind of label they need. Generate exactly ${count} label suggestions for the "${categoryTitle}" category that DIRECTLY match what the user is asking for.`,
     "",
+    "CRITICAL: Every suggestion MUST be relevant to the user's description. Do NOT generate generic or unrelated labels. Focus on what the user specifically asked for.",
+    variationHint,
     "Each label must follow this exact JSON format:",
     "[",
     `  { "name": "label-name", "color": "hex123", "description": "[${categoryTitle}] Description text [scope]" }`,
     "]",
     "",
     "Rules:",
-    "- name: lowercase, concise (1-3 words), use spaces for multi-word names",
+    "- name: lowercase, concise (1-3 words), use spaces for multi-word names, must reflect the user's request",
     "- color: 6-character hex without #, choose colors that are visually distinct from existing labels",
     `- description: MUST start with [${categoryTitle}] and end with [issues], [PRs], or [issues, PRs]`,
     "- Do NOT duplicate any of these existing labels:",
@@ -49,15 +58,20 @@ function buildSystemPrompt(
  * Build the user prompt for Copilot label generation.
  * @param description - The label description or use case
  * @param refinement - Optional refinement feedback for iterative improvements
+ * @param attempt - Attempt number for variation (1-based, defaults to 1)
  * @returns The formatted user prompt string
  */
 function buildUserPrompt(
   description: string,
-  refinement?: string
+  refinement?: string,
+  attempt: number = 1
 ): string {
   let prompt = `I need a label for: ${description}`;
   if (refinement) {
     prompt += `\n\nRefinement feedback: ${refinement}`;
+  }
+  if (attempt > 1) {
+    prompt += `\n\nGenerate different suggestions from previous attempts. This is attempt #${attempt}, so provide fresh and unique alternatives.`;
   }
   return prompt;
 }
@@ -122,8 +136,9 @@ export async function generateLabels(options: {
   count?: number;
   refinement?: string;
   model?: string;
+  attempt?: number;
 }): Promise<Label[]> {
-  const { category, description, count = 3, refinement, model } = options;
+  const { category, description, count = 3, refinement, model, attempt = 1 } = options;
 
   const client = new CopilotClient();
   await client.start();
@@ -131,7 +146,7 @@ export async function generateLabels(options: {
   try {
     const sessionConfig: Record<string, unknown> = {
       systemMessage: {
-        content: buildSystemPrompt(category, count),
+        content: buildSystemPrompt(category, count, attempt),
       },
     };
 
@@ -143,7 +158,7 @@ export async function generateLabels(options: {
     const session = await client.createSession(sessionConfig);
 
     try {
-      const userPrompt = buildUserPrompt(description, refinement);
+      const userPrompt = buildUserPrompt(description, refinement, attempt);
 
       // Send prompt and wait for complete response
       const response = await session.sendAndWait({ content: userPrompt });
