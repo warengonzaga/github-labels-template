@@ -30,14 +30,14 @@ function buildSystemPrompt(
 
   const variationHint =
     attempt > 1
-      ? `\nIMPORTANT: This is attempt #${attempt}. You MUST generate completely different label names, colors, and descriptions than any previous suggestions. Be creative and explore new angles.\n`
-      : "";
+      ? `IMPORTANT: This is attempt #${attempt}. You MUST generate completely different label names, colors, and descriptions than any previous suggestions. Be creative and explore new angles.`
+      : null;
 
   return [
     `You are a GitHub label generator. The user will describe the kind of label they need. Generate exactly ${count} label suggestions for the "${categoryTitle}" category that DIRECTLY match what the user is asking for.`,
     "",
     "CRITICAL: Every suggestion MUST be relevant to the user's description. Do NOT generate generic or unrelated labels. Focus on what the user specifically asked for.",
-    variationHint,
+    ...(variationHint ? ["", variationHint, ""] : [""]),
     "Each label must follow this exact JSON format:",
     "[",
     `  { "name": "label-name", "color": "hex123", "description": "[${categoryTitle}] Description text [scope]" }`,
