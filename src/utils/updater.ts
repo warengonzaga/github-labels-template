@@ -6,9 +6,9 @@
  * hitting the npm registry on every run.
  */
 
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
-import { join } from "path";
-import { homedir } from "os";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, renameSync } from "fs";
+import { join, dirname } from "path";
+import { homedir, tmpdir } from "os";
 import { getVersion } from "../ui/banner";
 
 export const CACHE_DIR = join(homedir(), ".ghlt");
@@ -25,15 +25,20 @@ export interface UpdateCache {
 
 /**
  * Compare two semver strings. Returns true if `latest` is strictly newer than `current`.
+ * Pre-release and build-metadata suffixes (e.g. "-beta", "+build") are stripped before
+ * comparison so that "1.0.0-beta" is treated as "1.0.0".
  */
 export function isNewerVersion(latest: string, current: string): boolean {
   const parse = (v: string) =>
     v
       .replace(/^v/, "")
+      .split(/[-+]/)[0] // strip pre-release / build-metadata suffixes
       .split(".")
       .map(Number);
   const [lMaj, lMin, lPatch] = parse(latest);
   const [cMaj, cMin, cPatch] = parse(current);
+  // Guard against malformed strings that produce NaN
+  if ([lMaj, lMin, lPatch, cMaj, cMin, cPatch].some(isNaN)) return false;
   if (lMaj !== cMaj) return lMaj > cMaj;
   if (lMin !== cMin) return lMin > cMin;
   return lPatch > cPatch;
@@ -53,13 +58,16 @@ export function readCache(cacheFile = CACHE_FILE): UpdateCache | null {
 }
 
 /**
- * Write to the update cache file. Silently ignores write errors.
+ * Write to the update cache file using an atomic temp-file + rename to prevent
+ * data corruption if two CLI processes run concurrently. Silently ignores errors.
  */
 export function writeCache(data: UpdateCache, cacheFile = CACHE_FILE): void {
   try {
-    const dir = join(cacheFile, "..");
+    const dir = dirname(cacheFile);
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-    writeFileSync(cacheFile, JSON.stringify(data), "utf-8");
+    const tmp = join(tmpdir(), `ghlt-update-${process.pid}-${Date.now()}.json`);
+    writeFileSync(tmp, JSON.stringify(data), "utf-8");
+    renameSync(tmp, cacheFile);
   } catch {
     // Cache is best-effort — silently fail
   }
@@ -75,7 +83,8 @@ export async function fetchLatestVersion(): Promise<string | null> {
     if (!res.ok) return null;
     const data = (await res.json()) as { version?: string };
     return data.version ?? null;
-  } catch {
+  } catch (err) {
+    console.debug("Failed to fetch latest version from npm registry:", err);
     return null;
   }
 }

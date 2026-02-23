@@ -11,11 +11,14 @@ import { showBanner, showUpdateBanner, getVersion } from "./ui/banner";
 import { checkForUpdate } from "./utils/updater";
 
 const isHelp = process.argv.includes("--help") || process.argv.includes("-h");
+const isUpdateCommand = process.argv.includes("update");
 showBanner(isHelp);
 
-const availableUpdate = checkForUpdate();
-if (availableUpdate) {
-  showUpdateBanner(availableUpdate);
+if (!isUpdateCommand) {
+  const availableUpdate = checkForUpdate();
+  if (availableUpdate) {
+    showUpdateBanner(availableUpdate);
+  }
 }
 
 const main = defineCommand({

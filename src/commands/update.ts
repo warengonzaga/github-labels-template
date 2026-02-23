@@ -68,6 +68,7 @@ export default defineCommand({
     try {
       const pm = detectPackageManager();
       const cmd = getUpdateCommand(pm);
+      info(`Running: ${cmd}`);
       execSync(cmd, { stdio: "inherit" });
       success(`ghlt updated to v${latest}`);
     } catch {

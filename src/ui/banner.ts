@@ -45,27 +45,18 @@ export function getAuthor(): string {
  */
 export function showUpdateBanner(latestVersion: string): void {
   const current = getVersion();
-  const inner1 = `  Update available: v${current} → v${latestVersion}  `;
-  const inner2 = `  Run ${pc.bold("ghlt update")} to upgrade.  `;
-  // Strip ANSI escape codes when measuring width for the box border
+  // Strip ANSI escape codes when measuring visible width for the box border
   const visibleLen = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, "").length;
-  const width = Math.max(visibleLen(inner1), visibleLen(inner2));
-  const line = "─".repeat(width);
 
-  console.log(pc.yellow(`┌${line}┐`));
-  console.log(
-    pc.yellow("│") +
-      pc.bold(` Update available: v${current} → v${latestVersion} `) +
-      " ".repeat(width - visibleLen(inner1)) +
-      pc.yellow("│")
-  );
-  console.log(
-    pc.yellow("│") +
-      `  Run ${pc.bold("ghlt update")} to upgrade.  ` +
-      " ".repeat(width - visibleLen(inner2)) +
-      pc.yellow("│")
-  );
-  console.log(pc.yellow(`└${line}┘`));
+  const line1 = `  ${pc.bold(`Update available: v${current} → v${latestVersion}`)}  `;
+  const line2 = `  Run ${pc.bold("ghlt update")} to upgrade.  `;
+  const width = Math.max(visibleLen(line1), visibleLen(line2));
+  const border = "─".repeat(width);
+
+  console.log(pc.yellow(`┌${border}┐`));
+  console.log(pc.yellow("│") + line1 + " ".repeat(width - visibleLen(line1)) + pc.yellow("│"));
+  console.log(pc.yellow("│") + line2 + " ".repeat(width - visibleLen(line2)) + pc.yellow("│"));
+  console.log(pc.yellow(`└${border}┘`));
   console.log();
 }
 

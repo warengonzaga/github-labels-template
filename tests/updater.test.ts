@@ -62,6 +62,16 @@ describe("Updater", () => {
       expect(isNewerVersion("v2.0.0", "1.9.9")).toBe(true);
       expect(isNewerVersion("2.0.0", "v1.9.9")).toBe(true);
     });
+
+    it("ignores pre-release suffix when comparing", () => {
+      expect(isNewerVersion("1.1.0-beta", "1.0.0")).toBe(true);
+      expect(isNewerVersion("1.0.0", "1.1.0-beta")).toBe(false);
+    });
+
+    it("returns false for malformed version strings", () => {
+      expect(isNewerVersion("not-a-version", "1.0.0")).toBe(false);
+      expect(isNewerVersion("1.0.0", "not-a-version")).toBe(false);
+    });
   });
 
   describe("readCache / writeCache", () => {
@@ -117,36 +127,46 @@ describe("Updater", () => {
   });
 
   describe("checkForUpdate", () => {
+    let originalCI: string | undefined;
+    let originalNoUpdateNotifier: string | undefined;
+
+    beforeEach(() => {
+      originalCI = process.env.CI;
+      originalNoUpdateNotifier = process.env.NO_UPDATE_NOTIFIER;
+    });
+
+    afterEach(() => {
+      if (originalCI === undefined) {
+        delete process.env.CI;
+      } else {
+        process.env.CI = originalCI;
+      }
+      if (originalNoUpdateNotifier === undefined) {
+        delete process.env.NO_UPDATE_NOTIFIER;
+      } else {
+        process.env.NO_UPDATE_NOTIFIER = originalNoUpdateNotifier;
+      }
+    });
+
     it("returns null when CI=true", () => {
-      const prev = process.env.CI;
       process.env.CI = "true";
-      const result = checkForUpdate(TMP_CACHE_FILE);
-      process.env.CI = prev ?? "";
-      if (prev === undefined) delete process.env.CI;
-      expect(result).toBeNull();
+      expect(checkForUpdate(TMP_CACHE_FILE)).toBeNull();
     });
 
     it("returns null when CI=1", () => {
-      const prev = process.env.CI;
       process.env.CI = "1";
-      const result = checkForUpdate(TMP_CACHE_FILE);
-      if (prev === undefined) delete process.env.CI;
-      else process.env.CI = prev;
-      expect(result).toBeNull();
+      expect(checkForUpdate(TMP_CACHE_FILE)).toBeNull();
     });
 
     it("returns null when NO_UPDATE_NOTIFIER is set", () => {
       process.env.NO_UPDATE_NOTIFIER = "1";
-      const result = checkForUpdate(TMP_CACHE_FILE);
-      delete process.env.NO_UPDATE_NOTIFIER;
-      expect(result).toBeNull();
+      expect(checkForUpdate(TMP_CACHE_FILE)).toBeNull();
     });
 
     it("returns null when no cache exists", () => {
       delete process.env.CI;
       delete process.env.NO_UPDATE_NOTIFIER;
-      const result = checkForUpdate(TMP_CACHE_FILE);
-      expect(result).toBeNull();
+      expect(checkForUpdate(TMP_CACHE_FILE)).toBeNull();
     });
 
     it("returns null when cached version equals current version", () => {
@@ -162,8 +182,7 @@ describe("Updater", () => {
       delete process.env.CI;
       delete process.env.NO_UPDATE_NOTIFIER;
       writeCache({ lastChecked: Date.now(), latestVersion: "999.0.0" }, TMP_CACHE_FILE);
-      const result = checkForUpdate(TMP_CACHE_FILE);
-      expect(result).toBe("999.0.0");
+      expect(checkForUpdate(TMP_CACHE_FILE)).toBe("999.0.0");
     });
   });
 });
