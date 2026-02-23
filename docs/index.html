@@ -737,12 +737,17 @@
         <div class="feature-card">
           <span class="icon">🚀</span>
           <h3>One Command Setup</h3>
-          <p>Run <code>ghlt apply</code> and all labels are created. Filter by <code>--category</code> or <code>--label</code> for selective apply.</p>
+          <p>Run <code>ghlt apply</code> and all labels are created. Filter by <code>--category</code> or <code>--label</code>, or skip labels with <code>--exclude</code>.</p>
         </div>
         <div class="feature-card">
           <span class="icon">🔀</span>
           <h3>Migrate Command</h3>
           <p>Clean slate in one command. <code>ghlt migrate</code> wipes all existing labels and applies the full template.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">📋</span>
+          <h3>List Command</h3>
+          <p>Inspect any repo's labels at a glance. <code>ghlt list</code> shows every label with its color and description.</p>
         </div>
         <div class="feature-card">
           <span class="icon">🔍</span>
@@ -767,7 +772,7 @@
         <div class="feature-card">
           <span class="icon">🧹</span>
           <h3>Wipe Command</h3>
-          <p>Remove all existing labels with <code>ghlt wipe</code>. Confirmation prompt keeps you safe from accidents.</p>
+          <p>Remove all or specific labels with <code>ghlt wipe</code>. Use <code>--label</code> or <code>--category</code> for targeted removal.</p>
         </div>
         <div class="feature-card">
           <span class="icon">🌐</span>
@@ -954,8 +959,31 @@
 <span class="comment"># Apply specific labels</span>
 <span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--label</span> "bug,enhancement"
 
+<span class="comment"># Apply all except certain labels</span>
+<span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--exclude</span> "bug,enhancement"
+
 <span class="comment"># Include AI-generated labels</span>
 <span class="cmd">ghlt</span> <span class="arg">apply</span> <span class="flag">--custom</span></pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-card-header">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+            <span>List &amp; Wipe</span>
+          </div>
+          <pre><span class="comment"># List all labels on the current repo</span>
+<span class="cmd">ghlt</span> <span class="arg">list</span>
+
+<span class="comment"># List labels on a specific repo</span>
+<span class="cmd">ghlt</span> <span class="arg">list</span> <span class="flag">--repo</span> owner/repo
+
+<span class="comment"># Remove specific labels</span>
+<span class="cmd">ghlt</span> <span class="arg">wipe</span> <span class="flag">--label</span> "bug,enhancement"
+
+<span class="comment"># Remove an entire category</span>
+<span class="cmd">ghlt</span> <span class="arg">wipe</span> <span class="flag">--category</span> type</pre>
         </div>
 
         <div class="code-card">

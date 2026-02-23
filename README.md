@@ -14,7 +14,9 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 - 🚀 **One Command Setup**: Apply all labels to any repo with `ghlt apply`
 - 🔍 **Auto-Detect Repo**: Automatically detects the current repository from git remote
 - 🔄 **Smart Conflict Handling**: Skips existing labels by default, `--force` to update
-- 🧹 **Wipe Command**: Remove all existing labels with a confirmation prompt
+- 📋 **List Command**: View all labels on any repo — name, color, and description at a glance
+- 🧹 **Wipe Command**: Remove all or specific labels with a confirmation prompt
+- 🚫 **Apply with Exclusions**: Skip specific labels or entire categories with `--exclude` / `--exclude-category`
 - ✅ **Pre-Flight Checks**: Validates `gh` CLI is installed and authenticated before doing anything
 - 📊 **Clear Output**: Structured logging powered by [@wgtechlabs/log-engine](https://github.com/wgtechlabs/log-engine) with color-coded levels and emoji
 - 🎨 **ASCII Banner**: Beautiful ANSI Shadow figlet banner with version and author info
@@ -83,11 +85,30 @@ ghlt apply --category community --label bug
 # Combine with force and repo
 ghlt apply --category type --force --repo owner/repo
 
+# Apply all labels except specific ones
+ghlt apply --exclude "bug,enhancement"
+
+# Apply all labels except an entire category
+ghlt apply --exclude-category type
+
+# Combine: apply all community labels except hacktoberfest
+ghlt apply --category community --exclude hacktoberfest
+
 # Include custom labels from labels-custom.json
 ghlt apply --custom
 
 # Apply only custom labels from a specific category
 ghlt apply --custom --category type
+```
+
+### List Labels
+
+```bash
+# List all labels on the current repo
+ghlt list
+
+# List labels on a specific repo
+ghlt list --repo owner/repo
 ```
 
 ### Generate Labels (AI)
@@ -145,6 +166,18 @@ ghlt wipe --repo owner/repo
 
 # Skip confirmation prompt
 ghlt wipe --yes
+
+# Remove specific labels
+ghlt wipe --label "bug,enhancement"
+
+# Remove all labels from a category
+ghlt wipe --category type
+
+# Remove labels from multiple categories
+ghlt wipe --category "type,status"
+
+# Include custom labels in the selective wipe scope
+ghlt wipe --category type --custom
 ```
 
 ### Preview Landing Page
@@ -243,24 +276,30 @@ Broad software layers — universal across any project.
 ghlt — GitHub Labels Template CLI
 
 USAGE
-  ghlt [OPTIONS] apply|wipe|migrate|generate|preview
+  ghlt [OPTIONS] apply|wipe|migrate|generate|list|preview
 
 OPTIONS
   -v, --version              Show version number
 
 COMMANDS
   apply      Apply labels from the template to a repository
-  wipe       Remove all existing labels from a repository
+  wipe       Remove all or specific labels from a repository
   migrate    Wipe all existing labels and apply the template (clean slate)
   generate   Generate custom labels using AI (requires GitHub Copilot)
+  list       List all labels in a repository
   preview    Preview the landing page locally in your browser
 
 OPTIONS (apply)
+  -r, --repo <owner/repo>        Target repository (default: auto-detect)
+  -f, --force                    Overwrite existing labels
+  -l, --label <name>             Apply specific label(s) by name (comma-separated)
+  -c, --category <name>          Apply labels from specific category(ies) (comma-separated)
+  -e, --exclude <name>           Exclude specific label(s) by name (comma-separated)
+      --exclude-category <name>  Exclude labels from specific category(ies) (comma-separated)
+      --custom                   Include custom labels from labels-custom.json
+
+OPTIONS (list)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
-  -f, --force                Overwrite existing labels
-  -l, --label <name>         Apply specific label(s) by name (comma-separated)
-  -c, --category <name>      Apply labels from specific category(ies) (comma-separated)
-      --custom               Include custom labels from labels-custom.json
 
 OPTIONS (migrate)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
@@ -275,6 +314,9 @@ OPTIONS (generate)
 OPTIONS (wipe)
   -r, --repo <owner/repo>   Target repository (default: auto-detect)
   -y, --yes                  Skip confirmation prompt
+  -l, --label <name>         Remove specific label(s) by name (comma-separated)
+  -c, --category <name>      Remove labels from specific category(ies) (comma-separated)
+      --custom               Include custom labels when using --label or --category
 
 OPTIONS (preview)
   -p, --port <number>        Port to serve on (default: 3000)
