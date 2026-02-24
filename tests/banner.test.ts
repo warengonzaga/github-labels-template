@@ -1,5 +1,5 @@
 import { describe, it, expect, spyOn, beforeEach, afterEach } from "bun:test";
-import { showBanner, getVersion, getAuthor } from "../src/ui/banner";
+import { showBanner, showUpdateBanner, getVersion, getAuthor } from "../src/ui/banner";
 
 describe("Banner", () => {
   describe("getVersion", () => {
@@ -62,6 +62,52 @@ describe("Banner", () => {
         .map((c: unknown[]) => String(c[0]))
         .join("\n");
       expect(allOutput).toContain(getAuthor());
+    });
+  });
+
+  describe("showUpdateBanner", () => {
+    let consoleSpy: ReturnType<typeof spyOn>;
+
+    beforeEach(() => {
+      consoleSpy = spyOn(console, "log").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      consoleSpy.mockRestore();
+    });
+
+    it("should print the update banner to console", () => {
+      showUpdateBanner("9.9.9");
+      expect(consoleSpy).toHaveBeenCalled();
+      // top border + line1 + line2 + bottom border + trailing empty line = 5 calls
+      expect(consoleSpy.mock.calls.length).toBe(5);
+    });
+
+    it("should include current and latest version in output", () => {
+      showUpdateBanner("9.9.9");
+      const allOutput = consoleSpy.mock.calls
+        .map((c: unknown[]) => String(c[0]))
+        .join("\n");
+      expect(allOutput).toContain(getVersion());
+      expect(allOutput).toContain("9.9.9");
+    });
+
+    it("should include upgrade instruction in output", () => {
+      showUpdateBanner("9.9.9");
+      const allOutput = consoleSpy.mock.calls
+        .map((c: unknown[]) => String(c[0]))
+        .join("\n");
+      expect(allOutput).toContain("ghlt update");
+    });
+
+    it("should render box border characters", () => {
+      showUpdateBanner("9.9.9");
+      const allOutput = consoleSpy.mock.calls
+        .map((c: unknown[]) => String(c[0]))
+        .join("\n");
+      expect(allOutput).toContain("┌");
+      expect(allOutput).toContain("└");
+      expect(allOutput).toContain("│");
     });
   });
 });

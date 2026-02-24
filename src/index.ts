@@ -6,10 +6,20 @@ import generate from "./commands/generate";
 import migrate from "./commands/migrate";
 import list from "./commands/list";
 import check from "./commands/check";
-import { showBanner, getVersion } from "./ui/banner";
+import update from "./commands/update";
+import { showBanner, showUpdateBanner, getVersion } from "./ui/banner";
+import { checkForUpdate } from "./utils/updater";
 
 const isHelp = process.argv.includes("--help") || process.argv.includes("-h");
+const isUpdateCommand = process.argv.includes("update");
 showBanner(isHelp);
+
+if (!isUpdateCommand) {
+  const availableUpdate = checkForUpdate();
+  if (availableUpdate) {
+    showUpdateBanner(availableUpdate);
+  }
+}
 
 const main = defineCommand({
   meta: {
@@ -31,6 +41,7 @@ const main = defineCommand({
     generate,
     list,
     check,
+    update,
   },
   run({ args }) {
     if (args.version) {

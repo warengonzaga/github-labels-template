@@ -40,6 +40,27 @@ export function getAuthor(): string {
 }
 
 /**
+ * Print the update advisory banner to stdout when a newer version is available.
+ * @param latestVersion - The latest available version string (e.g. "0.9.0")
+ */
+export function showUpdateBanner(latestVersion: string): void {
+  const current = getVersion();
+  // Strip ANSI escape codes when measuring visible width for the box border
+  const visibleLen = (s: string) => s.replace(/\x1b\[[0-9;]*m/g, "").length;
+
+  const line1 = `  ${pc.bold(`Update available: v${current} → v${latestVersion}`)}  `;
+  const line2 = `  Run ${pc.bold("ghlt update")} to upgrade.  `;
+  const width = Math.max(visibleLen(line1), visibleLen(line2));
+  const border = "─".repeat(width);
+
+  console.log(pc.yellow(`┌${border}┐`));
+  console.log(pc.yellow("│") + line1 + " ".repeat(width - visibleLen(line1)) + pc.yellow("│"));
+  console.log(pc.yellow("│") + line2 + " ".repeat(width - visibleLen(line2)) + pc.yellow("│"));
+  console.log(pc.yellow(`└${border}┘`));
+  console.log();
+}
+
+/**
  * Print the branded banner to stdout
  * @param minimal - If true, only show logo and version (used with --help)
  */
