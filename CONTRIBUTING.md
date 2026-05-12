@@ -4,6 +4,7 @@ Thanks for your interest in contributing to **GitHub Labels Template**! Here's h
 
 ## Prerequisites
 
+- [Node.js](https://nodejs.org) (latest)
 - [Bun](https://bun.sh) (v1.0+)
 - [GitHub CLI](https://cli.github.com) (`gh`) installed and authenticated
 
@@ -19,7 +20,8 @@ bun install
 
 ```bash
 # Run the CLI locally
-bun src/index.ts apply --help
+bun run build
+node dist/index.js apply --help
 
 # Build for production
 bun run build
