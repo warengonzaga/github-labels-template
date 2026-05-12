@@ -29,8 +29,8 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 # Using npx
 npx github-labels-template apply
 
-# Using bunx
-bunx github-labels-template apply
+# Using npm exec
+npm exec github-labels-template apply
 ```
 
 That's it. All 23 labels are applied to the current repo.

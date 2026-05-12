@@ -4,7 +4,7 @@ Thanks for your interest in contributing to **GitHub Labels Template**! Here's h
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org) (latest)
+- [Node.js](https://nodejs.org) (v25+)
 - [Bun](https://bun.sh) (v1.0+)
 - [GitHub CLI](https://cli.github.com) (`gh`) installed and authenticated
 
