@@ -11,12 +11,13 @@
   ],
   "scripts": {
     "build": "bun build src/index.ts --outfile dist/index.js --target node --packages external",
-    "dev": "bun src/index.ts",
-    "preview": "bun src/index.ts preview",
+    "dev": "bun run build && node dist/index.js",
+    "preview": "bun run build && node dist/index.js preview",
+    "start": "bun run build && node dist/index.js",
     "test": "bun test"
   },
   "engines": {
-    "node": ">=18",
+    "node": ">=25",
     "bun": ">=1.0"
   },
   "keywords": [
@@ -41,6 +42,7 @@
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
+    "@types/node": "^25.7.0",
     "@types/bun": "latest",
     "@types/figlet": "^1.7.0"
   }

@@ -19,7 +19,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '25'
       - uses: wgtechlabs/package-build-flow-action@v2.0.1
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}

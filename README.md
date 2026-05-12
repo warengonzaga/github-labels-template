@@ -21,7 +21,7 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 - 📊 **Clear Output**: Structured logging powered by [@wgtechlabs/log-engine](https://github.com/wgtechlabs/log-engine) with color-coded levels and emoji
 - 🎨 **ASCII Banner**: Beautiful ANSI Shadow figlet banner with version and author info
 - 🤖 **AI Label Generator**: Generate custom labels using GitHub Copilot — interactive pick, refine, and apply
-- 🌐 **Dual Runtime**: Works with both `npx` and `bunx`
+- 🌐 **Node Runtime + Bun Toolchain**: Runs on Node.js, built and tested with Bun
 
 ## Quick Start
 
@@ -29,8 +29,8 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 # Using npx
 npx github-labels-template apply
 
-# Using bunx
-bunx github-labels-template apply
+# Using npm exec
+npm exec github-labels-template apply
 ```
 
 That's it. All 23 labels are applied to the current repo.
@@ -325,6 +325,8 @@ OPTIONS (preview)
 ## Testing
 
 This project uses the [Bun test framework](https://bun.sh/docs/cli/test) for testing.
+
+Runtime execution uses Node.js (latest recommended).
 
 ```bash
 # Run all tests
