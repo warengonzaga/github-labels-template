@@ -674,7 +674,7 @@
   <!-- Nav -->
   <nav>
     <div class="container">
-      <div class="logo">🏷️ <span>ghlt</span> <span class="version">v0.5.0</span></div>
+      <div class="logo">🏷️ <span>ghlt</span> <span class="version">v0.9.3</span></div>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#ai">AI Generate</a></li>
@@ -778,6 +778,16 @@
           <span class="icon">🌐</span>
           <h3>Dual Runtime</h3>
           <p>Works with both <code>npx</code> and <code>bunx</code>. Install globally or run on-demand.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">🔎</span>
+          <h3>Check Command</h3>
+          <p>Validate a repo against the template. <code>ghlt check</code> reports missing labels, color mismatches, and description drift. Use <code>--strict</code> to enforce exact matches.</p>
+        </div>
+        <div class="feature-card">
+          <span class="icon">⬆️</span>
+          <h3>Update Command</h3>
+          <p>Stay current with <code>ghlt update</code>. Use <code>--check</code> or <code>--dry-run</code> to see if a newer version is available without installing.</p>
         </div>
       </div>
     </div>
@@ -1018,6 +1028,29 @@
 
 <span class="comment"># Include custom labels</span>
 <span class="cmd">ghlt</span> <span class="arg">migrate</span> <span class="flag">--custom</span></pre>
+        </div>
+
+        <div class="code-card">
+          <div class="code-card-header">
+            <span class="dot-red"></span>
+            <span class="dot-yellow"></span>
+            <span class="dot-green"></span>
+            <span>Check &amp; Update</span>
+          </div>
+          <pre><span class="comment"># Check repo against the template</span>
+<span class="cmd">ghlt</span> <span class="arg">check</span>
+
+<span class="comment"># Check a specific repo</span>
+<span class="cmd">ghlt</span> <span class="arg">check</span> <span class="flag">--repo</span> owner/repo
+
+<span class="comment"># Strict: flag color + desc mismatches</span>
+<span class="cmd">ghlt</span> <span class="arg">check</span> <span class="flag">--strict</span>
+
+<span class="comment"># See if a newer version is available</span>
+<span class="cmd">ghlt</span> <span class="arg">update</span> <span class="flag">--check</span>
+
+<span class="comment"># Update ghlt to the latest version</span>
+<span class="cmd">ghlt</span> <span class="arg">update</span></pre>
         </div>
 
         <div class="code-card">
