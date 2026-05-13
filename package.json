@@ -14,7 +14,9 @@
     "dev": "bun run build && node dist/index.js",
     "preview": "bun run build && node dist/index.js preview",
     "start": "bun run build && node dist/index.js",
-    "test": "bun test"
+    "test": "bun test",
+    "prepare": "bun run build",
+    "prepack": "bun run build"
   },
   "engines": {
     "node": ">=22",
