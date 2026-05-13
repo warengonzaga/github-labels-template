@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "bun build src/index.ts --outfile dist/index.js --target node --packages external",
+    "build": "bun build src/index.ts --outfile dist/index.js --target node",
     "dev": "bun run build && node dist/index.js",
     "preview": "bun run build && node dist/index.js preview",
     "start": "bun run build && node dist/index.js",
