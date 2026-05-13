@@ -11,13 +11,22 @@ import { showBanner, showUpdateBanner, getVersion } from "./ui/banner";
 import { checkForUpdate } from "./utils/updater";
 
 const isHelp = process.argv.includes("--help") || process.argv.includes("-h");
+const isVersion = process.argv.includes("--version") || process.argv.includes("-v");
 const isUpdateCommand = process.argv.includes("update");
-showBanner(isHelp);
 
-if (!isUpdateCommand) {
-  const availableUpdate = checkForUpdate();
-  if (availableUpdate) {
-    showUpdateBanner(availableUpdate);
+if (isVersion) {
+  console.log(`ghlt version v${getVersion()}`);
+  process.exit(0);
+}
+
+if (!isVersion) {
+  showBanner(isHelp);
+
+  if (!isUpdateCommand) {
+    const availableUpdate = checkForUpdate();
+    if (availableUpdate) {
+      showUpdateBanner(availableUpdate);
+    }
   }
 }
 
@@ -45,7 +54,7 @@ const main = defineCommand({
   },
   run({ args }) {
     if (args.version) {
-      console.log(`ghlt v${getVersion()}`);
+      console.log(`v${getVersion()}`);
     }
   },
 });

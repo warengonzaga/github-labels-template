@@ -2,28 +2,18 @@
  * CLI Banner
  *
  * ASCII art logo and version display for GHLT CLI.
- * Uses figlet with ANSI Shadow font for a modern look.
+ * Uses a pre-rendered Slant logo for stable output across environments.
  * Displayed at the top of CLI output.
  */
 
-import figlet from "figlet";
 import pc from "picocolors";
 import pkg from "../../package.json";
 
-// Generate the logo at module load time (synchronous, fast)
-let LOGO: string;
-try {
-  LOGO = figlet.textSync("GHLT", { font: "ANSI Shadow" });
-} catch {
-  // Fallback if figlet font not available
-  LOGO =
-    ` ██████╗ ██╗  ██╗██╗     ████████╗\n` +
-    `██╔════╝ ██║  ██║██║     ╚══██╔══╝\n` +
-    `██║  ███╗███████║██║        ██║   \n` +
-    `██║   ██║██╔══██║██║        ██║   \n` +
-    `╚██████╔╝██║  ██║███████╗   ██║   \n` +
-    ` ╚═════╝ ╚═╝  ╚═╝╚══════╝   ╚═╝   `;
-}
+const LOGO = String.raw`   ________  ____  ______
+  / ____/ / / / / /_  __/
+ / / __/ /_/ / /   / /
+/ /_/ / __  / /___/ /
+\____/_/ /_/_____/_/`;
 
 /**
  * Get the version string from package.json
@@ -66,25 +56,24 @@ export function showUpdateBanner(latestVersion: string): void {
  */
 export function showBanner(minimal = false): void {
   console.log(pc.cyan("\n" + LOGO));
+  console.log();
   console.log(
-    `  ${pc.dim("v" + getVersion())} ${pc.dim("—")} ${pc.dim("Built by " + getAuthor())}`
+    `  ${pc.white(`v${getVersion()}`)} ${pc.white("—")} ${pc.white(`Built by ${getAuthor()}`)} ${pc.white("(")}${pc.white(linkify("with Him", "https://youtu.be/VOZbswniA-g?si=pdVHNSAfZW0vQLJ7"))}${pc.white(")")}`
   );
 
   if (!minimal) {
-    console.log(
-      `  ${pc.dim(pkg.description)}`
-    );
     console.log();
     console.log(
-      `  ${pc.yellow("Star")}        ${pc.cyan("https://gh.waren.build/github-labels-template")}`
+      `  🤝 ${pc.white("Contribute:")} ${pc.dim(linkify("gh.waren.build/github-labels-template", "https://gh.waren.build/github-labels-template"))}`
     );
     console.log(
-      `  ${pc.green("Contribute")}  ${pc.cyan("https://gh.waren.build/github-labels-template/blob/main/CONTRIBUTING.md")}`
-    );
-    console.log(
-      `  ${pc.magenta("Sponsor")}     ${pc.cyan("https://warengonzaga.com/sponsor")}`
+      `  🙏 ${pc.white("Sponsor:")} ${pc.dim(linkify("warengonzaga.com/sponsor", "https://warengonzaga.com/sponsor"))}`
     );
   }
 
   console.log();
+}
+
+function linkify(label: string, url: string): string {
+  return `\u001B]8;;${url}\u0007${label}\u001B]8;;\u0007`;
 }
