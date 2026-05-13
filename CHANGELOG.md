@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [0.9.2] - 2026-05-13
+
+### Changed
+
+- align runtime docs and start workflow
+- switch runtime to node.js with bun as build toolchain
+
 ## [0.9.1] - 2026-05-12
 
 ### Changed
