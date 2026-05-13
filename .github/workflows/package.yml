@@ -9,6 +9,9 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        node-version: ['22', '24']
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -19,8 +22,9 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
-          node-version: '25'
-      - uses: wgtechlabs/package-build-flow-action@v2.0.1
+          node-version: ${{ matrix.node-version }}
+      - if: ${{ matrix.node-version == '22' }}
+        uses: wgtechlabs/package-build-flow-action@v2.0.1
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}

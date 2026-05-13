@@ -10,14 +10,15 @@
     "dist"
   ],
   "scripts": {
-    "build": "bun build src/index.ts --outfile dist/index.js --target node --packages external",
+    "build": "bun build src/index.ts --outfile dist/index.js --target node",
     "dev": "bun run build && node dist/index.js",
     "preview": "bun run build && node dist/index.js preview",
     "start": "bun run build && node dist/index.js",
-    "test": "bun test"
+    "test": "bun test",
+    "prepack": "bun run build"
   },
   "engines": {
-    "node": ">=25",
+    "node": ">=22",
     "bun": ">=1.0"
   },
   "keywords": [
@@ -38,12 +39,10 @@
     "@inquirer/prompts": "^8.2.1",
     "@wgtechlabs/log-engine": "^2.3.1",
     "citty": "^0.1.6",
-    "figlet": "^1.10.0",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^25.7.0",
-    "@types/bun": "latest",
-    "@types/figlet": "^1.7.0"
+    "@types/bun": "latest"
   }
 }

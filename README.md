@@ -19,7 +19,7 @@ A CLI tool to apply a curated set of GitHub labels to any repository using `gh` 
 - 🚫 **Apply with Exclusions**: Skip specific labels or entire categories with `--exclude` / `--exclude-category`
 - ✅ **Pre-Flight Checks**: Validates `gh` CLI is installed and authenticated before doing anything
 - 📊 **Clear Output**: Structured logging powered by [@wgtechlabs/log-engine](https://github.com/wgtechlabs/log-engine) with color-coded levels and emoji
-- 🎨 **ASCII Banner**: Beautiful ANSI Shadow figlet banner with version and author info
+- 🎨 **ASCII Banner**: Styled Slant text logo with version and author info
 - 🤖 **AI Label Generator**: Generate custom labels using GitHub Copilot — interactive pick, refine, and apply
 - 🌐 **Node Runtime + Bun Toolchain**: Runs on Node.js, built and tested with Bun
 
@@ -50,6 +50,8 @@ ghlt apply
 
 ## Prerequisites
 
+- [Node.js](https://nodejs.org) (v22+; LTS recommended: v22 or v24)
+- [Bun](https://bun.sh) (v1.0+)
 - [GitHub CLI](https://cli.github.com) (`gh`) installed and authenticated
 - [GitHub Copilot](https://github.com/features/copilot) subscription (required for `generate` command only)
 
@@ -326,7 +328,7 @@ OPTIONS (preview)
 
 This project uses the [Bun test framework](https://bun.sh/docs/cli/test) for testing.
 
-Runtime execution uses Node.js (latest recommended).
+Runtime execution uses Node.js v22+ (LTS recommended: v22 or v24).
 
 ```bash
 # Run all tests
