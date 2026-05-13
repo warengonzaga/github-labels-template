@@ -17,7 +17,7 @@
     "test": "bun test"
   },
   "engines": {
-    "node": ">=25",
+    "node": ">=22",
     "bun": ">=1.0"
   },
   "keywords": [
