@@ -50,6 +50,8 @@ ghlt apply
 
 ## Prerequisites
 
+- [Node.js](https://nodejs.org) (v22+; LTS recommended: v22 or v24)
+- [Bun](https://bun.sh) (v1.0+)
 - [GitHub CLI](https://cli.github.com) (`gh`) installed and authenticated
 - [GitHub Copilot](https://github.com/features/copilot) subscription (required for `generate` command only)
 
@@ -326,7 +328,7 @@ OPTIONS (preview)
 
 This project uses the [Bun test framework](https://bun.sh/docs/cli/test) for testing.
 
-Runtime execution uses Node.js (latest recommended).
+Runtime execution uses Node.js v22+ (LTS recommended: v22 or v24).
 
 ```bash
 # Run all tests
