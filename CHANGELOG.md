@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [0.9.3] - 2026-05-13
+
+### Changed
+
+- conditionally update package build action in workflow
+- revise README for ASCII banner styling and remove figlet dependencies
+- remove unnecessary packages flag from build script (#6)
+- add prepare and prepack scripts to package.json
+- change required Node.js version to 22+
+- adjust Node.js version strategy for workflows
+
 ## [0.9.2] - 2026-05-13
 
 ### Changed
