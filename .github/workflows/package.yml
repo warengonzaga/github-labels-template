@@ -23,7 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: wgtechlabs/package-build-flow-action@v2.0.1
+      - if: ${{ matrix.node-version == '22' }}
+        uses: wgtechlabs/package-build-flow-action@v2.0.1
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
